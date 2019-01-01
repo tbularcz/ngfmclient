@@ -4,7 +4,7 @@ import { Container, Button, H3, Text } from "native-base";
 
 import styles from "./styles";
 
-const launchscreenBg = require("../../assets/launchscreen-bg.png");
+const launchscreenBg = require("../../assets/splashscreen3.jpg");
 const launchscreenLogo = require("../../assets/logo-kitchen-sink.png");
 
 class Home extends Component {
@@ -23,9 +23,9 @@ class Home extends Component {
               backgroundColor: "transparent"
             }}
           >
-            <H3 style={styles.text}>App to showcase</H3>
+            <H3 style={styles.text}>Start organizing yourself</H3>
             <View style={{ marginTop: 8 }} />
-            <H3 style={styles.text}>NativeBase components</H3>
+            <H3 style={styles.text}>Welcome to tFridge</H3>
             <View style={{ marginTop: 8 }} />
           </View>
           <View style={{ marginBottom: 80 }}>

@@ -6,6 +6,6 @@ const Modal = require("./ModalComponent/Modal");
 
 ReactNative.Modal = Modal;
 
-// Platform.OS = "ios";
+Platform.OS = "ios";
 
 require("./main");

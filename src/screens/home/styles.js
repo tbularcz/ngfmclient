@@ -21,7 +21,7 @@ export default {
     height: 100
   },
   text: {
-    color: "#D8D8D8",
+    color: "#FFFFFF",
     bottom: 6,
     marginTop: 5
   }

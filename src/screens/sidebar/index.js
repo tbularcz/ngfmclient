@@ -23,11 +23,18 @@ const datas = [
     bg: "#C5F442"
   },
   {
+    name: "My Fridges",
+    route: "MyFridges",
+    icon: "phone-portrait",
+    bg: "#C5F442"
+  },
+  {
     name: "Logout",
     route: "Welcome",
     icon: "phone-portrait",
     bg: "#C5F442"
   },
+
   // {
   //   name: "Actionsheet",
   //   route: "Actionsheet",

@@ -33,11 +33,45 @@ class Firebase {
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
 
+  updateDB = updates => {
+    console.log("user in updateDB:", updates)
+    return this.db.ref().update(updates);
+  }
+
+  addfirstFridge = (uid) => {
+    var newPostKey = this.db.ref().child('fridges').push().key;
+    var updates = {};
+        updates['/users/' + uid + "/mydfridge"] = newPostKey;
+        updates['/users/' + uid + "/myfridges/" + newPostKey] = true;
+
+        updates['/fridges/' + newPostKey + "/Name"] = "Inital Fridge";
+        updates['/fridges/' + newPostKey + "/Beschreibung"] = "test";
+        updates['/fridges/' + newPostKey + "/Owner"] = uid;
+
+
+    this.updateDB(updates);
+  }
+
+  addnewFridge = () => {
+    var newPostKey = this.db.ref().child('fridges').push().key;
+    console.log("user add new Fridge: ",newPostKey )
+
+    var updates = {};
+        updates['/fridges/' + newPostKey + "/Name"] = "test";
+        updates['/fridges/' + newPostKey + "/Beschreibung"] = "test";
+        updates['/fridges/' + newPostKey + "/Owner"] = this.auth.currentUser.uid;
+        updates['/users/' + this.auth.currentUser.uid + "/myfridges/" + newPostKey] = true;
+    this.updateDB(updates);
+
+  }
+
+  //addFridge
   // *** User API ***
 
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref('users');
-
+  fridges = () => this.db.ref('users/'+this.auth.currentUser.uid+'/myfridges');
+  //fridges = uid => this.db.ref(`users/${uid}/myfridges`);
 }
 
 export default Firebase;

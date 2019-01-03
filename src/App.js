@@ -10,9 +10,10 @@ import Firebase, { FirebaseContext } from './components/firebase';
 
 import Home from "./screens/home/";
 import SideBar from "./screens/sidebar";
-import Welcome from "./screens/welcome/"
-import Login from "./screens/login/"
-import Signup from "./screens/signup/"
+import Welcome from "./screens/welcome/";
+import Login from "./screens/login/";
+import Signup from "./screens/signup/";
+import MyFridges from "./screens/myfridges/";
 
 //import { withAuthentication } from './components/Session';
 import { withFirebase } from './components/firebase';
@@ -25,6 +26,7 @@ const Drawer = DrawerNavigator(
     Welcome: {screen: Welcome},
     Login: {screen: Login},
     Signup: {screen: Signup},
+    MyFridges: {screen: MyFridges},
 
   },
   {

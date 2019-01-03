@@ -49,6 +49,7 @@ class Signup extends Component {
             email,
           })
           .then(() => {
+            this.props.firebase.addfirstFridge(authUser.user.uid);
             this.setState({ ...INITIAL_STATE });
             this.props.navigation.navigate("Home")
           })

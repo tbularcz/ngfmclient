@@ -130,7 +130,7 @@ class Signup extends Component {
                 secureTextEntry
               />
             </Item>
-            <Button disabled={isInvalid} type= "submit" block style={{ margin: 15, marginTop: 50 }}>
+            <Button disabled={isInvalid} onClick={this.onSubmit} block style={{ margin: 15, marginTop: 50 }}>
               <Text>Sign Up </Text>
             </Button>
             {error && <p>{error.message}</p>}
@@ -141,4 +141,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default withFirebase(Signup);

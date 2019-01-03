@@ -15,9 +15,7 @@ class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
-    //this.db = app.database();
-    console.log("user: FB initialized", this.auth)
-
+    this.db = app.database();
   }
 
   // *** Auth API ***
@@ -39,6 +37,7 @@ class Firebase {
 
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref('users');
+
 }
 
 export default Firebase;

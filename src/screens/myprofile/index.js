@@ -46,7 +46,6 @@ class MyProfile extends Component {
       const fridgeList = [];
       Object.entries(usersObject).map(([key,value])=>{
         fridgeList.push(key);
-        console.log("user myfridges", key)
       });
       this.setState({
         fridges: fridgeList,
@@ -63,6 +62,10 @@ class MyProfile extends Component {
     this.setState({
       selected: value
     });
+    var updates = {};
+        updates['/user/' + this.auth.currentUser.uid + "/mydfridge"] = value;
+    this.props.firebase.updateDB(updates);
+
   }
 
   render() {
@@ -107,7 +110,7 @@ class MyProfile extends Component {
 
             <Item inlineLabel>
               <Label>Default Fridge:</Label>
-              
+
               <Right>
                 <Picker
                   mode="dropdown"
@@ -117,7 +120,11 @@ class MyProfile extends Component {
                   selectedValue={this.state.selected}
                   onValueChange={this.onValueChange.bind(this)}
                 >
-                  <FridgesList fridges={fridges} />
+                {fridges.map((data) => (
+                      <Picker.Item label={data} value="key0" />
+
+                    ))
+                }
                 </Picker>
               </Right>
             </Item>
@@ -148,13 +155,6 @@ class MyProfile extends Component {
   }
 }
 
-const FridgesList = ({ fridges }) => (
-<div>
-  {fridges.map((data) => (
-        <Picker.Item label={data} value="key0" />
-      ))
-  }
-  </div>
-);
+
 
 export default withFirebase(MyProfile);

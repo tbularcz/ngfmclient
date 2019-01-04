@@ -14,6 +14,7 @@ import Welcome from "./screens/welcome/";
 import Login from "./screens/login/";
 import Signup from "./screens/signup/";
 import MyFridges from "./screens/myfridges/";
+import MyProfile from "./screens/myprofile/";
 
 //import { withAuthentication } from './components/Session';
 import { withFirebase } from './components/firebase';
@@ -27,6 +28,7 @@ const Drawer = DrawerNavigator(
     Login: {screen: Login},
     Signup: {screen: Signup},
     MyFridges: {screen: MyFridges},
+    MyProfile: {screen: MyProfile},
 
   },
   {

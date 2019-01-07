@@ -27,7 +27,8 @@ const INITIAL_STATE = {
   password: '',
   dfridge: null,
   selected: "key1",
-  fridges: []
+  fridges: [],
+  dfridge: []
 };
 
 
@@ -41,6 +42,7 @@ class MyProfile extends Component {
 
   componentDidMount() {
     this.setState({ fridges: [], loading: true });
+
     this.props.firebase.myfridges().on('value', snapshot => {
       const usersObject = snapshot.val();
       const fridgeList = [];
@@ -52,10 +54,21 @@ class MyProfile extends Component {
       });
     });
 
+    this.props.firebase.mydfridge().on('value', snapshot => {
+      const usersObject = snapshot.val();
+      const fridgeList = [];
+      Object.entries(usersObject).map(([key,value])=>{
+        fridgeList.push(key);
+      });
+      this.setState({
+        selected: fridgeList,
+      });
+    });
+
   }
 
   componentWillUnmount() {
-    this.props.firebase.fridges().off();
+    this.props.firebase.myfridges().off();
   }
 
   onValueChange(value: string) {

@@ -34,7 +34,7 @@ class myFridges extends Component {
 
   componentDidMount() {
     this.setState({ fridges: [], loading: true });
-    this.props.firebase.fridges().on('value', snapshot => {
+    this.props.firebase.myfridges().on('value', snapshot => {
       const usersObject = snapshot.val();
       const fridgeList = [];
       Object.entries(usersObject).map(([key,value])=>{
@@ -48,7 +48,7 @@ class myFridges extends Component {
   }
 
   componentWillUnmount() {
-    this.props.firebase.fridges().off();
+    this.props.firebase.myfridges().off();
   }
 
   addFridge = event => {

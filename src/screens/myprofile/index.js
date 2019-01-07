@@ -41,7 +41,7 @@ class MyProfile extends Component {
 
   componentDidMount() {
     this.setState({ fridges: [], loading: true });
-    this.props.firebase.fridges().on('value', snapshot => {
+    this.props.firebase.myfridges().on('value', snapshot => {
       const usersObject = snapshot.val();
       const fridgeList = [];
       Object.entries(usersObject).map(([key,value])=>{
@@ -63,7 +63,7 @@ class MyProfile extends Component {
       selected: value
     });
     var updates = {};
-        updates['/user/' + this.auth.currentUser.uid + "/mydfridge"] = value;
+        updates['/users/' + this.props.firebase.cuser() + "/mydfridge"] = value;
     this.props.firebase.updateDB(updates);
 
   }
@@ -121,7 +121,7 @@ class MyProfile extends Component {
                   onValueChange={this.onValueChange.bind(this)}
                 >
                 {fridges.map((data) => (
-                      <Picker.Item label={data} value="key0" />
+                      <Picker.Item label={data} value={data} />
 
                     ))
                 }

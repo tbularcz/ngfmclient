@@ -73,7 +73,7 @@ class MyProfile extends Component {
 
   componentWillUnmount() {
     this.props.firebase.myfridges().off();
-  }
+  } 
 
   onValueChange(value: string) {
     this.setState({

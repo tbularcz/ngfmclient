@@ -23,6 +23,7 @@ import styles from "./styles";
 import { withFirebase } from '../../components/firebase';
 
 const INITIAL_STATE = {
+  username: '',
   email: '',
   password: '',
   dfridge: null,
@@ -43,6 +44,16 @@ class MyProfile extends Component {
   componentDidMount() {
     this.setState({ fridges: [], loading: true });
 
+    this.props.firebase.username().on('value', snapshot => {
+      const usersObject = snapshot.val();
+      this.setState({username: usersObject})
+    });
+    this.props.firebase.email().on('value', snapshot => {
+      const usersObject = snapshot.val();
+      this.setState({email: usersObject})
+    });
+
+
     this.props.firebase.myfridges().on('value', snapshot => {
       const usersObject = snapshot.val();
       const fridgeList = [];
@@ -53,16 +64,9 @@ class MyProfile extends Component {
         fridges: fridgeList,
       });
     });
-
     this.props.firebase.mydfridge().on('value', snapshot => {
       const usersObject = snapshot.val();
-      const fridgeList = [];
-      Object.entries(usersObject).map(([key,value])=>{
-        fridgeList.push(key);
-      });
-      this.setState({
-        selected: fridgeList,
-      });
+      this.setState({selected: usersObject})
     });
 
   }
@@ -78,11 +82,12 @@ class MyProfile extends Component {
     var updates = {};
         updates['/users/' + this.props.firebase.cuser() + "/mydfridge"] = value;
     this.props.firebase.updateDB(updates);
+    //force reload fehlt
 
   }
 
   render() {
-    const { email, password, dfridge, fridges } = this.state;
+    const { username, email, password, dfridge, fridges } = this.state;
     return (
       <Container style={styles.container}>
         <Header>
@@ -104,17 +109,19 @@ class MyProfile extends Component {
         <Form>
 
         <Item inlineLabel disabled>
-          <Label>Username</Label>
+          <Label>Username:         </Label>
             <Input
-              name="email"
-              value={email}
+              disabled ="true"
+              name="Username"
+              value={username}
               type="text"
             />
           </Item>
 
           <Item inlineLabel disabled>
-            <Label>Email Address:</Label>
+            <Label>Email Address:   </Label>
               <Input
+                disabled ="true"
                 name="email"
                 value={email}
                 type="text"
@@ -141,18 +148,6 @@ class MyProfile extends Component {
                 </Picker>
               </Right>
             </Item>
-
-
-
-          <Item inlineLabel disabled>
-            <Label>Password:        </Label>
-              <Input
-                name="password"
-                value={password}
-                type="password"
-                secureTextEntry
-              />
-          </Item>
         </Form>
         </Content>
 

@@ -73,7 +73,7 @@ class MyProfile extends Component {
 
   componentWillUnmount() {
     this.props.firebase.myfridges().off();
-  } 
+  }
 
   onValueChange(value: string) {
     this.setState({
@@ -108,7 +108,7 @@ class MyProfile extends Component {
         <Content padder>
         <Form>
 
-        <Item inlineLabel disabled>
+        <Item fixedLabel>
           <Label>Username:         </Label>
             <Input
               disabled ="true"
@@ -118,7 +118,7 @@ class MyProfile extends Component {
             />
           </Item>
 
-          <Item inlineLabel disabled>
+          <Item fixedLabel>
             <Label>Email Address:   </Label>
               <Input
                 disabled ="true"
@@ -128,7 +128,7 @@ class MyProfile extends Component {
               />
             </Item>
 
-            <Item inlineLabel>
+            <Item fixedLabel>
               <Label>Default Fridge:</Label>
 
               <Right>

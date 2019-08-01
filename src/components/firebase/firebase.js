@@ -11,11 +11,14 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
+
+
 class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = app.database();
+    //this.addItem =this.addItem.bind(this)
   }
 
   // *** Auth API ***
@@ -54,7 +57,7 @@ class Firebase {
 
   addnewFridge = () => {
     var newPostKey = this.db.ref().child('fridges').push().key;
-    console.log("user add new Fridge: ",newPostKey )
+    console.log("user add new Fridge: ",newPostKey );
 
     var updates = {};
         updates['/fridges/' + newPostKey + "/Name"] = "test";
@@ -65,6 +68,34 @@ class Firebase {
 
   }
 
+  addnewItem = () => {
+    var newPostKey = this.db.ref().child('items').push().key;
+    const smydfridge = '';
+
+    this.db.ref().child('users/'+this.auth.currentUser.uid+'/mydfridge').on('value', snapshot => {
+      const usersObject = snapshot.val();
+      const smydfridge = usersObject;
+      console.log("smydfridge:", smydfridge)
+      var updates = {};
+          updates['/items/' + newPostKey + "/Name"] = "test";
+          //anzahl
+          //datum
+          //gelöscht true false für recover / vorschläge
+          //in welcher fridge
+          updates['/items/' + newPostKey + "/Beschreibung"] = "test";
+          updates['/items/' + newPostKey + "/Owner"] = this.auth.currentUser.uid;
+          updates['/items/' + newPostKey + "/Fridge"] = smydfridge;
+          updates['/users/' + this.auth.currentUser.uid + "/myitems/" + newPostKey] = true;
+          this.updateDB(updates);
+    });
+
+
+
+
+
+
+  }
+
   //addFridge
   // *** User API ***
 
@@ -72,11 +103,12 @@ class Firebase {
   users = () => this.db.ref('users');
   cuser = () => this.auth.currentUser.uid
   myfridges = () => this.db.ref('users/'+this.auth.currentUser.uid+'/myfridges');
+  myitems = () => this.db.ref('users/'+this.auth.currentUser.uid+'/myitems');
   mydfridge = () => this.db.ref('users/'+this.auth.currentUser.uid+'/mydfridge');
   username = () => this.db.ref('users/'+this.auth.currentUser.uid+'/username');
   email = () => this.db.ref('users/'+this.auth.currentUser.uid+'/email');
-
-
+  detitem = id => this.db.ref('users/'+this.auth.currentUser.uid+`/myitems/${id}`);
+  citem = id => this.db.ref(`items/${id}`);
 
   //fridges = uid => this.db.ref(`users/${uid}/myfridges`);
 }

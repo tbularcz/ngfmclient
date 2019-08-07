@@ -67,33 +67,32 @@ class Firebase {
     this.updateDB(updates);
 
   }
+  removeItem = (reference) => {
+    
+    this.db.ref().child('/items/' + reference).remove();
+    this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myitems/"+reference).remove();
+  }
 
-  addnewItem = () => {
+  addnewItem = (Beschreibung, Name) => {
     var newPostKey = this.db.ref().child('items').push().key;
     const smydfridge = '';
-
     this.db.ref().child('users/'+this.auth.currentUser.uid+'/mydfridge').on('value', snapshot => {
       const usersObject = snapshot.val();
       const smydfridge = usersObject;
       console.log("smydfridge:", smydfridge)
       var updates = {};
-          updates['/items/' + newPostKey + "/Name"] = "test";
+          updates['/items/' + newPostKey + "/Name"] = Name;
           //anzahl
           //datum
           //gelöscht true false für recover / vorschläge
           //in welcher fridge
-          updates['/items/' + newPostKey + "/Beschreibung"] = "test";
+          updates['/items/' + newPostKey + "/Beschreibung"] = Beschreibung;
           updates['/items/' + newPostKey + "/Owner"] = this.auth.currentUser.uid;
           updates['/items/' + newPostKey + "/Fridge"] = smydfridge;
           updates['/users/' + this.auth.currentUser.uid + "/myitems/" + newPostKey] = true;
           this.updateDB(updates);
     });
-
-
-
-
-
-
+    return newPostKey;
   }
 
   //addFridge
@@ -109,6 +108,7 @@ class Firebase {
   email = () => this.db.ref('users/'+this.auth.currentUser.uid+'/email');
   detitem = id => this.db.ref('users/'+this.auth.currentUser.uid+`/myitems/${id}`);
   citem = id => this.db.ref(`items/${id}`);
+  allitems = () => this.db.ref(`items`);
 
   //fridges = uid => this.db.ref(`users/${uid}/myfridges`);
 }

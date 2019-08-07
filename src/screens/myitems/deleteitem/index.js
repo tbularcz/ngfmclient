@@ -20,7 +20,7 @@ import {
 } from "native-base";
 
 import styles from "./styles";
-import { withFirebase } from '../../components/firebase';
+import { withFirebase } from '../../../components/firebase';
 
 const INITIAL_STATE = {
   name: '',
@@ -29,8 +29,6 @@ const INITIAL_STATE = {
   id: '',
   fridge:'',
 };
-
-
 
 class DetItem extends Component {
   constructor(props) {
@@ -43,39 +41,28 @@ class DetItem extends Component {
 
     this.props.firebase.citem(this.props.navigation.state.params.itemId).on('value', snapshot => {
       const usersObject = snapshot.val();
-      this.setState({owner: usersObject.Owner,
-                    beschreibung: usersObject.Beschreibung,
-                    name: usersObject.Name,
-                    fridge: usersObject.Fridge
-                    })
+      if (usersObject!=null){
+        this.setState({owner: usersObject.Owner,
+                      beschreibung: usersObject.Beschreibung,
+                      name: usersObject.Name,
+                      fridge: usersObject.Fridge
+                      })
+      }
     });
-
   }
 
   componentWillUnmount() {
     this.props.firebase.myfridges().off();
   }
 
-  onBeschreibungChange(value: string) {
-    this.setState({
-      beschreibung: value,
-    });
-
-    var updates = {};
-    updates['/items/' +this.props.navigation.state.params.itemId + "/Beschreibung"] = value;
-    this.props.firebase.updateDB(updates);
+  deleteItem(data) {
+    this.props.navigation.navigate("MyItems");
+    console.log('remove: ', data)
+    this.props.firebase.removeItem(data);
 
   }
 
-  onNameChange(value: string) {
-    this.setState({
-      name: value
-    });
-    var updates = {};
-    updates['/items/' +this.props.navigation.state.params.itemId + "/Name"] = value;
-    this.props.firebase.updateDB(updates);
 
-  }
 
   render() {
     const { id, owner, name, beschreibung, fridge } = this.state;
@@ -86,13 +73,13 @@ class DetItem extends Component {
           <Left>
             <Button
               transparent
-              onPress={() => this.props.navigation.navigate("DrawerOpen")}
+              onPress={() => this.props.navigation.navigate("MyItems")}
             >
-              <Icon name="ios-menu" />
+              <Icon name="arrow-back" />
             </Button>
           </Left>
           <Body>
-            <Title>{this.props.navigation.state.params.itemId}</Title>
+            <Title>{this.state.name}</Title>
           </Body>
           <Right />
         </Header>
@@ -116,7 +103,7 @@ class DetItem extends Component {
               name="item"
               value={this.state.name}
               type="text"
-              onChange={e => this.onNameChange(e.target.value)}
+              disabled='true'
             />
           </Item>
 
@@ -126,7 +113,7 @@ class DetItem extends Component {
                 name="beschreibung"
                 value={this.state.beschreibung}
                 type="text"
-                onChange={e => this.onBeschreibungChange(e.target.value)}
+                disabled='true'
 
               />
             </Item>
@@ -156,8 +143,8 @@ class DetItem extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={console.log("safe1")}>
-              <Text>Save</Text>
+            <Button active full onClick={() => {this.deleteItem(this.props.navigation.state.params.itemId)}}>
+              <Text>Delete Item</Text>
             </Button>
           </FooterTab>
         </Footer>

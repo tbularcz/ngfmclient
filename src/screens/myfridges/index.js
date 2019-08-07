@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import {
   Container,
   Header,
@@ -13,27 +13,54 @@ import {
   Right,
   List,
   ListItem,
-  Body
-} from "native-base";
+  Body} from "native-base";
 
 import styles from "./styles";
-import { withFirebase } from '../../components/firebase';
-
-//const usersList = [];
-
+import {withFirebase} from '../../components/firebase';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
 
 class myFridges extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      fridgesList:[],
       loading: false,
       fridges: [],
-};
+      key: [],
+    };
   }
 
   componentDidMount() {
-    this.setState({ fridges: [], loading: true });
+    this.setState({ fridges: [], loading: true, });
+    var fList = [];
+    var fridgeList = [];
+
+    this.props.firebase.allfridges().orderByChild('Owner').equalTo(this.props.firebase.cuser()).on('value', snapshot => {
+      const usersObject = snapshot.val();
+      console.log('FL' ,usersObject)
+      if (usersObject != null) {
+        Object.entries(usersObject).map(([key, value]) => {
+          fList = ({
+            key: key, // 'test'//value.Name
+            name: value.Name
+          });
+          fridgeList.push(fList);
+        });
+        this.setState({
+          loading: false,
+          key: fridgeList,
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      };
+    });
+    console.log('asdasd', fridgeList)
+  }
+
+  /* OLD this.setState({ fridges: [], loading: true });
     this.props.firebase.myfridges().on('value', snapshot => {
       const usersObject = snapshot.val();
       const fridgeList = [];
@@ -45,19 +72,58 @@ class myFridges extends Component {
         fridges: fridgeList,
       });
     });
-  }
+  }*/
 
   componentWillUnmount() {
     this.props.firebase.myfridges().off();
   }
+  getName = data => {
+    console.log('getName: ', data);
+    let rvalue = data.name;
+    return rvalue;
+  };
 
-  addFridge = event => {
-    this.props.firebase.addnewFridge()
-    event.preventDefault();
+  gotoFDetails = data => {
+    console.log("show details of Fridge: ", data.key)
+
+    this.props.navigation.navigate("DetFridge", {
+      fridgeId: data.key
+    })
+    //this.props.firebase.addnewItem()
+  }
+
+  addFridge() {
+    console.log('new Fridge')
+    this.props.navigation.navigate("NewFridge")
+    //event.preventDefault();
   };
 
   render() {
-    const { fridges, loading } = this.state;
+    const FridgeList = ({fridges}) => (
+      <div>
+        {fridges.map((data) => (
+          <ListItem>
+            <Left>
+              <Text >{this.getName(data)}</Text>
+            </Left>
+
+            <Right>
+              <Button onClick= {() => this.props.navigation.navigate("DeleteFridge", {fridgeId: data.key})}>
+                <Text>-</Text>
+              </Button>
+            </Right>
+            <Right>
+              <Button onClick= {() => this.gotoFDetails(data)}>
+                <Text>></Text>
+              </Button>
+            </Right>
+          </ListItem>
+        ))}
+      </div>
+    );
+
+    const { key, loading } = this.state;
+
     return (
       <Container style={styles.container}>
         <Header>
@@ -76,40 +142,25 @@ class myFridges extends Component {
         </Header>
 
         <Content>
-          <List>
+          <List >
           {loading && <div>Loading ...</div>}
-          <FridgesList fridges={fridges} />
-            <Button onClick={this.addFridge} block style={{ margin: 15, marginTop: 50 }}>
-              <Text>Add Fridge </Text>
-            </Button>
+          <FridgeList  fridges={key} />
           </List>
         </Content>
 
         <Footer>
           <FooterTab>
-            <Button active full>
-              <Text>Manage Your Fridges</Text>
+            <Button active full onClick={() => {this.addFridge()}}>
+              <Text>Add New Fridge</Text>
             </Button>
           </FooterTab>
         </Footer>
       </Container>
     );
   }
+
 }
 
-const FridgesList = ({ fridges }) => (
-<div>
-  {fridges.map((data) => (
-    <ListItem>
-      <Left>
-        <Text>{data}</Text>
-      </Left>
-      <Right>
-        <Icon name="arrow-forward" />
-      </Right>
-    </ListItem>
-  ))}
-  </div>
-);
 
-export default withFirebase(myFridges);
+
+  export default withFirebase(myFridges);

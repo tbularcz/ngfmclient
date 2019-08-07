@@ -55,22 +55,27 @@ class Firebase {
     this.updateDB(updates);
   }
 
-  addnewFridge = () => {
+  addnewFridge = (Beschreibung, Name) => {
     var newPostKey = this.db.ref().child('fridges').push().key;
     console.log("user add new Fridge: ",newPostKey );
 
     var updates = {};
-        updates['/fridges/' + newPostKey + "/Name"] = "test";
-        updates['/fridges/' + newPostKey + "/Beschreibung"] = "test";
+        updates['/fridges/' + newPostKey + "/Name"] = Name;
+        updates['/fridges/' + newPostKey + "/Beschreibung"] = Beschreibung;
         updates['/fridges/' + newPostKey + "/Owner"] = this.auth.currentUser.uid;
         updates['/users/' + this.auth.currentUser.uid + "/myfridges/" + newPostKey] = true;
     this.updateDB(updates);
-
+    return newPostKey;
   }
+
   removeItem = (reference) => {
-    
     this.db.ref().child('/items/' + reference).remove();
     this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myitems/"+reference).remove();
+  }
+
+  removeFridge = (reference) => {
+    this.db.ref().child('/fridge/' + reference).remove();
+    this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myfridges/"+reference).remove();
   }
 
   addnewItem = (Beschreibung, Name) => {
@@ -108,7 +113,9 @@ class Firebase {
   email = () => this.db.ref('users/'+this.auth.currentUser.uid+'/email');
   detitem = id => this.db.ref('users/'+this.auth.currentUser.uid+`/myitems/${id}`);
   citem = id => this.db.ref(`items/${id}`);
+  cfridge = id => this.db.ref(`fridges/${id}`);
   allitems = () => this.db.ref(`items`);
+  allfridges = () => this.db.ref(`fridges`);
 
   //fridges = uid => this.db.ref(`users/${uid}/myfridges`);
 }

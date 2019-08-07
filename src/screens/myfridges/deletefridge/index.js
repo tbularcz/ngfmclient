@@ -27,12 +27,10 @@ const INITIAL_STATE = {
   beschreibung: '',
   owner: '',
   id: '',
-  fridge:'',
+
 };
 
-
-
-class detItem extends Component {
+class deleteFridge extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
@@ -41,44 +39,27 @@ class detItem extends Component {
 
   componentDidMount() {
 
-    this.props.firebase.citem(this.props.navigation.state.params.itemId).on('value', snapshot => {
+    this.props.firebase.cfridge(this.props.navigation.state.params.fridgeId).on('value', snapshot => {
       const usersObject = snapshot.val();
-
         this.setState({owner: usersObject.Owner,
                       beschreibung: usersObject.Beschreibung,
                       name: usersObject.Name,
-                      fridge: usersObject.Fridge
                       })
-
-
     });
-
   }
 
   componentWillUnmount() {
     this.props.firebase.myfridges().off();
   }
 
-  onBeschreibungChange(value: string) {
-    this.setState({
-      beschreibung: value,
-    });
-
-    var updates = {};
-    updates['/items/' +this.props.navigation.state.params.itemId + "/Beschreibung"] = value;
-    this.props.firebase.updateDB(updates);
+  deleteItem(data) {
+    this.props.navigation.navigate("MyFridges");
+    console.log('remove: ', data)
+    this.props.firebase.removeFridge(data);
 
   }
 
-  onNameChange(value: string) {
-    this.setState({
-      name: value
-    });
-    var updates = {};
-    updates['/items/' +this.props.navigation.state.params.itemId + "/Name"] = value;
-    this.props.firebase.updateDB(updates);
 
-  }
 
   render() {
     const { id, owner, name, beschreibung, fridge } = this.state;
@@ -108,7 +89,7 @@ class detItem extends Component {
             <Input
               disable='true'
               name="id"
-              value={this.props.navigation.state.params.itemId}
+              value={this.props.navigation.state.params.fridgeId}
               type="text"
             />
           </Item>
@@ -119,7 +100,7 @@ class detItem extends Component {
               name="item"
               value={this.state.name}
               type="text"
-              onChange={e => this.onNameChange(e.target.value)}
+              disabled='true'
             />
           </Item>
 
@@ -129,7 +110,7 @@ class detItem extends Component {
                 name="beschreibung"
                 value={this.state.beschreibung}
                 type="text"
-                onChange={e => this.onBeschreibungChange(e.target.value)}
+                disabled='true'
 
               />
             </Item>
@@ -144,23 +125,13 @@ class detItem extends Component {
                 />
               </Item>
 
-              <Item fixedLabel>
-                <Label>Fridge:           </Label>
-                  <Input
-                  disabled='true'
-                    name="fridge"
-                    value={fridge}
-                    type="text"
-                  />
-                </Item>
-
         </Form>
         </Content>
 
         <Footer>
           <FooterTab>
-            <Button active full>
-              <Text>Item Detail</Text>
+            <Button active full onClick={() => {this.deleteItem(this.props.navigation.state.params.fridgeId)}}>
+              <Text>Delete Fridge</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -171,4 +142,4 @@ class detItem extends Component {
 
 
 
-export default withFirebase(detItem);
+export default withFirebase(deleteFridge);

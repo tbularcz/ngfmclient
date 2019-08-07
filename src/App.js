@@ -14,6 +14,9 @@ import Welcome from "./screens/welcome/";
 import Login from "./screens/login/";
 import Signup from "./screens/signup/";
 import MyFridges from "./screens/myfridges/";
+import DetFridge from "./screens/myfridges/detfridge/";
+import NewFridge from "./screens/myfridges/newfridge/";
+import DeleteFridge from "./screens/myfridges/deletefridge/";
 import MyProfile from "./screens/myprofile/";
 import MyItems from "./screens/myitems/";
 import DetItem from "./screens/myitems/detitem/";
@@ -32,6 +35,9 @@ const Drawer = DrawerNavigator(
     Login: {screen: Login},
     Signup: {screen: Signup},
     MyFridges: {screen: MyFridges},
+    DetFridge: {screen: DetFridge},
+    NewFridge: {screen: NewFridge},
+    DeleteFridge: {screen: DeleteFridge},
     MyProfile: {screen: MyProfile},
     MyItems: {screen: MyItems},
     DetItem: {screen: DetItem},

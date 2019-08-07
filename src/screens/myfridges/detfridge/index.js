@@ -27,12 +27,11 @@ const INITIAL_STATE = {
   beschreibung: '',
   owner: '',
   id: '',
-  fridge:'',
 };
 
 
 
-class detItem extends Component {
+class detFridge extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
@@ -41,18 +40,13 @@ class detItem extends Component {
 
   componentDidMount() {
 
-    this.props.firebase.citem(this.props.navigation.state.params.itemId).on('value', snapshot => {
+    this.props.firebase.cfridge(this.props.navigation.state.params.fridgeId).on('value', snapshot => {
       const usersObject = snapshot.val();
-
         this.setState({owner: usersObject.Owner,
                       beschreibung: usersObject.Beschreibung,
                       name: usersObject.Name,
-                      fridge: usersObject.Fridge
                       })
-
-
     });
-
   }
 
   componentWillUnmount() {
@@ -65,7 +59,7 @@ class detItem extends Component {
     });
 
     var updates = {};
-    updates['/items/' +this.props.navigation.state.params.itemId + "/Beschreibung"] = value;
+    updates['/fridges/' +this.props.navigation.state.params.fridgeId + "/Beschreibung"] = value;
     this.props.firebase.updateDB(updates);
 
   }
@@ -75,21 +69,26 @@ class detItem extends Component {
       name: value
     });
     var updates = {};
-    updates['/items/' +this.props.navigation.state.params.itemId + "/Name"] = value;
+    updates['/fridges/' +this.props.navigation.state.params.fridgeId + "/Name"] = value;
     this.props.firebase.updateDB(updates);
 
   }
 
+  changeDFridge(value: string) {
+    var updates = {};
+        updates['/users/' + this.props.firebase.cuser() + "/mydfridge"] = value;
+    this.props.firebase.updateDB(updates);
+  }
+
   render() {
-    const { id, owner, name, beschreibung, fridge } = this.state;
-    //const { itemID } = this.props.navigation.state.params
+    const { id, owner, name, beschreibung } = this.state;
     return (
       <Container style={styles.container}>
         <Header>
           <Left>
             <Button
               transparent
-              onPress={() => this.props.navigation.navigate("MyItems")}
+              onPress={() => this.props.navigation.navigate("MyFridges")}
             >
               <Icon name="arrow-back" />
             </Button>
@@ -114,7 +113,7 @@ class detItem extends Component {
           </Item>
 
         <Item fixedLabel>
-          <Label>Artikel:          </Label>
+          <Label>Name:          </Label>
             <Input
               name="item"
               value={this.state.name}
@@ -143,24 +142,13 @@ class detItem extends Component {
                   type="text"
                 />
               </Item>
-
-              <Item fixedLabel>
-                <Label>Fridge:           </Label>
-                  <Input
-                  disabled='true'
-                    name="fridge"
-                    value={fridge}
-                    type="text"
-                  />
-                </Item>
-
         </Form>
         </Content>
 
         <Footer>
           <FooterTab>
-            <Button active full>
-              <Text>Item Detail</Text>
+            <Button active full onClick={() => {this.changeDFridge(this.props.navigation.state.params.itemId)}}>
+              <Text>Set as Default Fridge</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -171,4 +159,4 @@ class detItem extends Component {
 
 
 
-export default withFirebase(detItem);
+export default withFirebase(detFridge);

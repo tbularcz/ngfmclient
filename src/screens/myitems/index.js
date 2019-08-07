@@ -20,19 +20,12 @@ import styles from "./styles";
 import { withFirebase } from '../../components/firebase';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-
-//const usersList = [];
-
-
-
-
 class myItems extends Component {
-
 
 constructor(props) {
     super(props);
-    this.gotoDetails = this.gotoDetails.bind(this);
-    this.getName = this.getName.bind(this);
+    //this.gotoDetails = this.gotoDetails.bind(this);
+    //this.getName = this.getName.bind(this);
     this.state = {
       itemList:[],
       loading: false,
@@ -51,10 +44,7 @@ constructor(props) {
     this.props.firebase.user(this.props.firebase.cuser()).child('/mydfridge').on('value', snapshot => {
       const usersObject = snapshot.val();
       this.state.dfridge= usersObject;
-      console.log('halo',this.state.dfridge)
 
-
-    console.log('sort:', this.state.dfridge)
     this.props.firebase.allitems().orderByChild('Fridge').equalTo(this.state.dfridge).on('value', snapshot => {
       const usersObject = snapshot.val();
       //const itemList = [];
@@ -117,8 +107,6 @@ constructor(props) {
 
 
   render() {
-    //const { navigation } = this.props;
-    //const itemId = navigation.getParam('itemId', 'NO-ID');
     const ItemsList = ({items}) => (
       <div>
         {items.map((data) => (
@@ -126,14 +114,15 @@ constructor(props) {
             <Left>
               <Text >{this.getName(data)}</Text>
             </Left>
-            <Right>
-              <Button onClick= {() => this.gotoDetails(data)}>
-                <Text>+</Text>
-              </Button>
-            </Right>
+
             <Right>
               <Button onClick= {() => this.props.navigation.navigate("DeleteItem", {itemId: data.key})}>
                 <Text>-</Text>
+              </Button>
+            </Right>
+            <Right>
+              <Button onClick= {() => this.gotoDetails(data)}>
+                <Text>></Text>
               </Button>
             </Right>
           </ListItem>

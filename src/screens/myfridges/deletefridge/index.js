@@ -27,6 +27,7 @@ const INITIAL_STATE = {
   beschreibung: '',
   owner: '',
   id: '',
+  dfridge:'',
 
 };
 
@@ -52,10 +53,26 @@ class deleteFridge extends Component {
     this.props.firebase.myfridges().off();
   }
 
-  deleteItem(data) {
-    this.props.navigation.navigate("MyFridges");
-    console.log('remove: ', data)
-    this.props.firebase.removeFridge(data);
+  deleteFridge(data) {
+    //check if dfridge if yes dont deleteFridge
+    this.props.firebase.user(this.props.firebase.cuser()).child('/mydfridge').on('value', snapshot => {
+      const usersObject = snapshot.val();
+      this.state.dfridge= usersObject;
+
+      if(this.state.dfridge==data){
+        console.log('this is the dFridge')
+        alert("this is your default Fridge an cannot be deleted")
+      }else{
+        console.log('this is NOT the dFridge');
+        this.props.navigation.navigate("MyFridges");
+        console.log('remove: ', data)
+        this.props.firebase.removeFridge(data);
+      };
+    });
+
+
+
+
 
   }
 
@@ -70,7 +87,7 @@ class deleteFridge extends Component {
           <Left>
             <Button
               transparent
-              onPress={() => this.props.navigation.navigate("MyItems")}
+              onPress={() => this.props.navigation.navigate("MyFridges")}
             >
               <Icon name="arrow-back" />
             </Button>
@@ -130,7 +147,7 @@ class deleteFridge extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={() => {this.deleteItem(this.props.navigation.state.params.fridgeId)}}>
+            <Button active full onClick={() => {this.deleteFridge(this.props.navigation.state.params.fridgeId)}}>
               <Text>Delete Fridge</Text>
             </Button>
           </FooterTab>

@@ -74,7 +74,7 @@ class Firebase {
   }
 
   removeFridge = (reference) => {
-    this.db.ref().child('/fridge/' + reference).remove();
+    this.db.ref().child('/fridges/' + reference).remove();
     this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myfridges/"+reference).remove();
   }
 

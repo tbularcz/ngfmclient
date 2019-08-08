@@ -143,7 +143,7 @@ class DetItem extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={() => {this.deleteItem(this.props.navigation.state.params.itemId)}}>
+            <Button active full danger onClick={() => {this.deleteItem(this.props.navigation.state.params.itemId)}}>
               <Text>Delete Item</Text>
             </Button>
           </FooterTab>

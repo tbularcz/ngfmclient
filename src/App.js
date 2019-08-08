@@ -22,6 +22,7 @@ import MyItems from "./screens/myitems/";
 import DetItem from "./screens/myitems/detitem/";
 import NewItem from "./screens/myitems/newitem/";
 import DeleteItem from "./screens/myitems/deleteitem/";
+import CheckOut from "./screens/checkout/";
 
 //import { withAuthentication } from './components/Session';
 import { withFirebase } from './components/firebase';
@@ -43,6 +44,7 @@ const Drawer = DrawerNavigator(
     DetItem: {screen: DetItem},
     NewItem: {screen: NewItem},
     DeleteItem: {screen: DeleteItem},
+    CheckOut: {screen: CheckOut},
 
   },
   {

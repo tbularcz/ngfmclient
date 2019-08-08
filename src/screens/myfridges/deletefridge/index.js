@@ -16,7 +16,8 @@ import {
   Label,
   Item,
   Picker,
-  Input
+  Input,
+  Toast
 } from "native-base";
 
 import styles from "./styles";
@@ -28,6 +29,8 @@ const INITIAL_STATE = {
   owner: '',
   id: '',
   dfridge:'',
+  showToast: false,
+
 
 };
 
@@ -61,7 +64,13 @@ class deleteFridge extends Component {
 
       if(this.state.dfridge==data){
         console.log('this is the dFridge')
-        alert("this is your default Fridge an cannot be deleted")
+        //alert("this is your default Fridge an cannot be deleted")
+        Toast.show({
+                text: "This is your Default Fridge and cannot be deleted!",
+                buttonText: "Okay",
+                duration: 3000
+              });
+
       }else{
         console.log('this is NOT the dFridge');
         this.props.navigation.navigate("MyFridges");
@@ -69,11 +78,6 @@ class deleteFridge extends Component {
         this.props.firebase.removeFridge(data);
       };
     });
-
-
-
-
-
   }
 
 
@@ -147,7 +151,7 @@ class deleteFridge extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={() => {this.deleteFridge(this.props.navigation.state.params.fridgeId)}}>
+            <Button active full danger onClick={() => {this.deleteFridge(this.props.navigation.state.params.fridgeId)}}>
               <Text>Delete Fridge</Text>
             </Button>
           </FooterTab>

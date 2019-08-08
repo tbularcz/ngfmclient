@@ -86,7 +86,7 @@ class NewItem extends Component {
           <Left>
             <Button
               transparent
-              onPress={() => this.props.navigation.navigate("MyItems")}
+              onPress={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}
             >
               <Icon name="arrow-back" />
             </Button>

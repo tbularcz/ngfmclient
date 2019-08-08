@@ -68,12 +68,32 @@ class Firebase {
     return newPostKey;
   }
 
+  moveFbRecord(oldRef, newRef) {
+
+          oldRef.once('value').then(snap => {
+               return newRef.set(snap.val());
+          }).then(() => {
+               return oldRef.set(null);
+          }).then(() => {
+               console.log('Done!');
+          }).catch(err => {
+               console.log(err.message);
+          });
+
+   }
+
+
+
   removeItem = (reference) => {
+    this.moveFbRecord(this.db.ref().child('/items/' + reference), this.db.ref().child('/r_items/' + reference));
+
     this.db.ref().child('/items/' + reference).remove();
     this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myitems/"+reference).remove();
   }
 
   removeFridge = (reference) => {
+    this.moveFbRecord(this.db.ref().child('/fridges/' + reference), this.db.ref().child('/r_fridges/' + reference));
+
     this.db.ref().child('/fridges/' + reference).remove();
     this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myfridges/"+reference).remove();
   }

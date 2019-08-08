@@ -82,7 +82,7 @@ constructor(props) {
 
   addItem() {
     console.log('new Item')
-    this.props.navigation.navigate("NewItem")
+    this.props.navigation.navigate("NewItem", {route: 'MyItems'});
     //event.preventDefault();
   };
 
@@ -95,7 +95,7 @@ constructor(props) {
   gotoDetails = data => {
     console.log("show details of Item: ", data.key )
     //this.props.navigation.navigate("DrawerOpen")
-    this.props.navigation.navigate("DetItem", {itemId: data.key})
+    this.props.navigation.navigate("DetItem", {itemId: data.key, route: 'MyItems'})
     //this.props.firebase.addnewItem()
   }
 
@@ -103,7 +103,6 @@ constructor(props) {
     console.log('remove(myitems): ', data.key)
     this.props.navigation.navigate("DeleteItem", {itemId: data.key})
 }
-
 
 
   render() {

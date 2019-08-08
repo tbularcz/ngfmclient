@@ -89,7 +89,7 @@ class detItem extends Component {
           <Left>
             <Button
               transparent
-              onPress={() => this.props.navigation.navigate("MyItems")}
+              onPress={() => this.props.navigation.navigate(this.props.navigation.state.params.route)}
             >
               <Icon name="arrow-back" />
             </Button>
@@ -153,6 +153,11 @@ class detItem extends Component {
                     type="text"
                   />
                 </Item>
+                <Item fixedLabel>
+                <Label>QR Code          </Label>
+                    <div>asdasdasdasdasd
+                    </div>
+                  </Item>
 
         </Form>
         </Content>

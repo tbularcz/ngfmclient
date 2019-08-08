@@ -41,6 +41,12 @@ const datas = [
     bg: "#C5F442"
   },
   {
+    name: "Checkout",
+    route: "CheckOut",
+    icon: "phone-portrait",
+    bg: "#C5F442"
+  },
+  {
     name: "Logout",
     route: "Welcome",
     icon: "phone-portrait",

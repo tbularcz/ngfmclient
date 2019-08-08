@@ -47,10 +47,6 @@ class Home extends Component {
         <Text><b>Please select an action:</b></Text>
         <Text> </Text>
 
-        <Button active full onClick={() => {this.addItem()}}>
-          <Text>Add Item</Text>
-        </Button>
-
         <Text>  </Text>
 
         <Button danger full onClick={() => {this.props.navigation.navigate("CheckOut")}}>
@@ -63,8 +59,8 @@ class Home extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full >
-              <Text>Footer</Text>
+            <Button active full danger >
+              <Text>Delete</Text>
             </Button>
           </FooterTab>
         </Footer>

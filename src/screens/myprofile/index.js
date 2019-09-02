@@ -131,7 +131,7 @@ class MyProfile extends Component {
             <Item fixedLabel>
               <Label>Default Fridge:</Label>
 
-              <Right>
+
                 <Picker
                   mode="dropdown"
                   iosHeader="Select your SIM"
@@ -146,7 +146,6 @@ class MyProfile extends Component {
                     ))
                 }
                 </Picker>
-              </Right>
             </Item>
         </Form>
         </Content>

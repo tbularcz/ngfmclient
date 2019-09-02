@@ -2,7 +2,9 @@ import React from "react";
 import { Root } from "native-base";
 import {
   StackNavigator,
-  DrawerNavigator
+  DrawerNavigator,
+  DrawerContent,
+  DrawerItems
 } from "react-navigation/lib/react-navigation.js";
 import Firebase, { FirebaseContext } from './components/firebase';
 
@@ -52,7 +54,7 @@ const Drawer = DrawerNavigator(
     contentOptions: {
       activeTintColor: "#e91e63"
     },
-    contentComponent: props => <SideBar {...props} />
+      contentComponent: props => <SideBar {...props} />
   }
 );
 

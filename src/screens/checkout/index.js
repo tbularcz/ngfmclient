@@ -13,6 +13,9 @@ import {
   Right,
   Body
 } from "native-base";
+import Camera from 'react-html5-camera-photo';
+import 'react-html5-camera-photo/build/css/index.css';
+
 
 import styles from "./styles";
 
@@ -22,6 +25,12 @@ class Home extends Component {
     this.props.navigation.navigate("NewItem", {route: 'Home'})
     //event.preventDefault();
   };
+
+  onTakePhoto (dataUri) {
+    // Do stuff with the dataUri photo...
+    console.log('takePhoto');
+  }
+
 
 
   render() {
@@ -52,6 +61,10 @@ class Home extends Component {
         <Button danger full onClick={() => {this.props.navigation.navigate("CheckOut")}}>
           <Text>Check Out Item</Text>
         </Button>
+
+        <Camera
+          onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
+        />
 
         <Text> </Text>
 

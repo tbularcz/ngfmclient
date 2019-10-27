@@ -81,7 +81,7 @@ class SideBar extends Component {
         >
           <Image source={drawerCover} style={styles.drawerCover} />
           <Image square style={styles.drawerImage} source={drawerImage} />
-          {console.log("test:", datas)}
+          
           <List
             dataArray={datas}
             renderRow={data => (

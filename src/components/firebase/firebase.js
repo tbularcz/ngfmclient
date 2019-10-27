@@ -13,11 +13,15 @@ const config = {
 
 
 
+var ret = "";
+
+
 class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = app.database();
+
     //this.addItem =this.addItem.bind(this)
   }
 
@@ -120,6 +124,8 @@ class Firebase {
     return newPostKey;
   }
 
+
+
   //addFridge
   // *** User API ***
 
@@ -134,6 +140,7 @@ class Firebase {
   detitem = id => this.db.ref('users/'+this.auth.currentUser.uid+`/myitems/${id}`);
   citem = id => this.db.ref(`items/${id}`);
   cfridge = id => this.db.ref(`fridges/${id}`);
+  itemOwner = id => this.db.ref(`items/${id}/Owner`);
   allitems = () => this.db.ref(`items`);
   allfridges = () => this.db.ref(`fridges`);
 

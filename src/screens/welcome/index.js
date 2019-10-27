@@ -21,6 +21,36 @@ class Welcome extends Component {
     //this.onSubmit = this.onSubmit.bind(this);
     //this.props.firebase = this.props.firebase.bind(this);
   }
+
+  componentDidMount() {
+
+  }
+
+  checkNav = params => {
+    //in case of Item is given - jump to item
+    //should check if item is valid
+    //shoudl chek if user is 22cVGuA57H28BxlUoxvFhVKYia4J8Lr4Dt8CQ8KohWik29onKxXI5Edha
+    //if item is valid and belongs to users
+    console.log("Params sind: ", params);
+    var item = params.substring(params.search("item="),params.search("&"));
+    var owner = params.substring(params.search("owner=")+6);
+    var validcombination =false;
+
+
+    //console.log("Item to check: ", item);
+    //console.log("Owner to check: ", owner);
+    this.props.firebase.itemOwner(item).on('value', snapshot => {
+      const usersObject = snapshot.val();
+      //console.log("Owner ist", usersObject);
+      validcombination = (usersObject==owner)
+      if(validcombination){
+        //console.log("in klammer:", item, "0 ist", item.charAt(0))
+        this.props.navigation.navigate("DetItem", {itemId: item, route: 'MyItems'})
+      }
+    })
+  }
+
+
   onSubmit = event => {
     const { email, password } = this.state;
     this.props.firebase
@@ -37,6 +67,13 @@ class Welcome extends Component {
 
   render() {
     const { email, password, error } = this.state;
+
+
+
+    //console.log(window.location.search.substring(6))
+    //if item is given jump to details
+    this.checkNav(window.location.search.substring(6))
+
     return (
       <Container>
         <StatusBar barStyle="light-content" />
@@ -79,11 +116,16 @@ class Welcome extends Component {
               onPress={() => this.props.navigation.navigate("Login")}
             >
               <Text>  Log In! </Text>
+
             </Button>
           </View>
         </ImageBackground>
       </Container>
+
+
+
     );
+
   }
 }
 

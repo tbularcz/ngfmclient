@@ -8,6 +8,8 @@ import {
 } from "react-navigation/lib/react-navigation.js";
 import Firebase, { FirebaseContext } from './components/firebase';
 
+
+
 //Navigation
 
 import Home from "./screens/home/";

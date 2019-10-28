@@ -18,7 +18,7 @@ import styles from "./styles";
 
 class Home extends Component {
   addItem() {
-    console.log('new Item')
+    //console.log('new Item')
     this.props.navigation.navigate("NewItem", {route: 'Home'})
     //event.preventDefault();
   };
@@ -58,6 +58,10 @@ class Home extends Component {
         </Button>
 
         <Text> </Text>
+
+        <Button warning full onClick={() => {this.props.navigation.navigate("MyItems")}}>
+          <Text>Show my Items</Text>
+        </Button>
 
         </Content>
 

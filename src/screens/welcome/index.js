@@ -14,6 +14,7 @@ const INITIAL_STATE = {
   error: null,
 };
 
+
 class Welcome extends Component {
   constructor(props) {
     super(props);
@@ -31,21 +32,22 @@ class Welcome extends Component {
     //should check if item is valid
     //shoudl chek if user is 22cVGuA57H28BxlUoxvFhVKYia4J8Lr4Dt8CQ8KohWik29onKxXI5Edha
     //if item is valid and belongs to users
-    console.log("Params sind: ", params);
+    //console.log("Params sind: ", params);
     var item = params.substring(params.search("item="),params.search("&"));
     var owner = params.substring(params.search("owner=")+6);
     var validcombination =false;
-
+    //var url ="";
 
     //console.log("Item to check: ", item);
     //console.log("Owner to check: ", owner);
+
     this.props.firebase.itemOwner(item).on('value', snapshot => {
       const usersObject = snapshot.val();
       //console.log("Owner ist", usersObject);
       validcombination = (usersObject==owner)
       if(validcombination){
         //console.log("in klammer:", item, "0 ist", item.charAt(0))
-        this.props.navigation.navigate("DetItem", {itemId: item, route: 'MyItems'})
+        this.props.navigation.navigate("DeleteItem", {itemId: item, route: 'MyItems'})
       }
     })
   }

@@ -47,7 +47,8 @@ class detItem extends Component {
         this.setState({owner: usersObject.Owner,
                       beschreibung: usersObject.Beschreibung,
                       name: usersObject.Name,
-                      fridge: usersObject.Fridge
+                      fridge: usersObject.Fridge,
+                      datum: usersObject.Date
                       })
 
 
@@ -82,6 +83,7 @@ class detItem extends Component {
 
   render() {
     const { id, owner, name, beschreibung, fridge } = this.state;
+      var QRCode = require('qrcode.react');
     //const { itemID } = this.props.navigation.state.params
     return (
       <Container style={styles.container}>
@@ -133,6 +135,17 @@ class detItem extends Component {
 
               />
             </Item>
+            <Item fixedLabel >
+              <Label>Eingefroren am:  </Label>
+                <Input
+                  disabled='true'
+                  name="Datum"
+                  value={this.state.datum}
+                  type="date"
+
+
+                />
+              </Item>
 
             <Item fixedLabel>
               <Label>Owner:           </Label>
@@ -154,19 +167,19 @@ class detItem extends Component {
                   />
                 </Item>
                 <Item fixedLabel>
-                <Label>QR Code          </Label>
-                    <div>asdasdasdasdasd
-                    </div>
-                  </Item>
+                  <Label>QR Code:           </Label>
+                    <QRCode value={'http://'+process.env.REACT_APP_DEV_URL+'?item='+this.state.id+'?user='+this.state.fridge} />
+                </Item>
 
         </Form>
         </Content>
 
         <Footer>
           <FooterTab>
-            <Button active full>
-              <Text>Item Detail</Text>
+            <Button active success full onClick={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
+              <Text>Speichern</Text>
             </Button>
+
           </FooterTab>
         </Footer>
       </Container>

@@ -68,7 +68,7 @@ constructor(props) {
         });
       };
     });
-    console.log('asdasd' ,itemList)
+    //console.log('asdasd' ,itemList)
     });
   }
 
@@ -87,7 +87,7 @@ constructor(props) {
   };
 
   getName = data => {
-    console.log('getName: ',data);
+    //console.log('getName: ',data);
     let rvalue=data.name;
     return rvalue;
   };

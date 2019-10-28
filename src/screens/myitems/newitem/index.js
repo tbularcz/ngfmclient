@@ -22,6 +22,7 @@ import {
 import styles from "./styles";
 import { withFirebase } from '../../../components/firebase';
 
+
 const INITIAL_STATE = {
   name: '',
   beschreibung: '',
@@ -40,9 +41,21 @@ class NewItem extends Component {
   }
 
   componentDidMount() {
+    var key = this.props.firebase.addnewItem("", "")
+    this.setState({id: key})
 
-  this.setState({id: this.props.firebase.addnewItem("Beschreibung", "Name")})
-  //console.log('newkey: ',this.state.id)
+    //console.log('newkey: '+key)
+
+    this.props.firebase.citem(key).on('value', snapshot => {
+      const usersObject = snapshot.val();
+        if (usersObject){
+        this.setState({owner: usersObject.Owner,
+                      beschreibung: usersObject.Beschreibung,
+                      name: usersObject.Name,
+                      fridge: usersObject.Fridge
+                      })
+                    }});
+
 
   }
 
@@ -77,20 +90,21 @@ class NewItem extends Component {
 
   }
 
+  deleteItem(data) {
+    this.props.navigation.navigate(this.props.navigation.state.params.route);
+    console.log('remove: ', data)
+    this.props.firebase.removeItem(data);
+
+  }
+
   render() {
     const { id, owner, name, beschreibung, fridge } = this.state;
     //const { itemID } = this.props.navigation.state.params
+    var QRCode = require('qrcode.react');
     return (
       <Container style={styles.container}>
         <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}
-            >
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
+  
           <Body>
             <Title>{this.state.name}</Title>
           </Body>
@@ -135,8 +149,8 @@ class NewItem extends Component {
               <Label>Owner:           </Label>
                 <Input
                 disabled='true'
-                  name="owner"
-                  value='n/a'
+                  name="Owner"
+                  value={this.state.owner}
                   type="text"
                 />
               </Item>
@@ -146,18 +160,27 @@ class NewItem extends Component {
                   <Input
                   disabled='true'
                     name="fridge"
-                    value='n/a'
+                    value={this.state.fridge}
                     type="text"
                   />
                 </Item>
+
+                <Item fixedLabel>
+                  <Label>QR Code:           </Label>
+                    <QRCode value={'http://'+process.env.REACT_APP_DEV_URL+'?item='+this.state.id+'?user='+this.state.fridge} />
+                </Item>
+
 
         </Form>
         </Content>
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={this.addItem}>
-              <Text>Item Detail</Text>
+            <Button success onClick={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
+              <Text>Safe</Text>
+            </Button>
+            <Button danger onClick={() => {this.deleteItem(this.state.id)}}>
+              <Text>Discard</Text>
             </Button>
           </FooterTab>
         </Footer>

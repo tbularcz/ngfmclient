@@ -41,7 +41,7 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
 
   updateDB = updates => {
-    console.log("user in updateDB:", updates)
+    //console.log("user in updateDB:", updates)
     return this.db.ref().update(updates);
   }
 
@@ -54,6 +54,7 @@ class Firebase {
         updates['/fridges/' + newPostKey + "/Name"] = "Inital Fridge";
         updates['/fridges/' + newPostKey + "/Beschreibung"] = "test";
         updates['/fridges/' + newPostKey + "/Owner"] = uid;
+
 
 
     this.updateDB(updates);
@@ -108,7 +109,7 @@ class Firebase {
     this.db.ref().child('users/'+this.auth.currentUser.uid+'/mydfridge').on('value', snapshot => {
       const usersObject = snapshot.val();
       const smydfridge = usersObject;
-      console.log("smydfridge:", smydfridge)
+      console.log("date: ", new Date())
       var updates = {};
           updates['/items/' + newPostKey + "/Name"] = Name;
           //anzahl
@@ -119,6 +120,7 @@ class Firebase {
           updates['/items/' + newPostKey + "/Owner"] = this.auth.currentUser.uid;
           updates['/items/' + newPostKey + "/Fridge"] = smydfridge;
           updates['/users/' + this.auth.currentUser.uid + "/myitems/" + newPostKey] = true;
+          updates['/items/' + newPostKey + "/Date"] = new Date();
           this.updateDB(updates);
     });
     return newPostKey;
@@ -143,6 +145,7 @@ class Firebase {
   itemOwner = id => this.db.ref(`items/${id}/Owner`);
   allitems = () => this.db.ref(`items`);
   allfridges = () => this.db.ref(`fridges`);
+  fridgeowner = id => this.db.ref(`fridges/${id}/Name`);
 
   //fridges = uid => this.db.ref(`users/${uid}/myfridges`);
 }

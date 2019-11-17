@@ -21,6 +21,7 @@ import {
 
 import styles from "./styles";
 import { withFirebase } from '../../../components/firebase';
+import axios from 'axios'
 
 
 const INITIAL_STATE = {
@@ -52,7 +53,8 @@ class NewItem extends Component {
         this.setState({owner: usersObject.Owner,
                       beschreibung: usersObject.Beschreibung,
                       name: usersObject.Name,
-                      fridge: usersObject.Fridge
+                      fridge: usersObject.Fridge,
+                      anzahl: usersObject.Count
                       })
                     }});
 
@@ -89,6 +91,15 @@ class NewItem extends Component {
     this.props.firebase.updateDB(updates);
 
   }
+  onCountChange(value: string) {
+    this.setState({
+      count: value
+    });
+    var updates = {};
+    updates['/items/' +this.state.id + "/Count"] = value;
+    this.props.firebase.updateDB(updates);
+
+  }
 
   deleteItem(data) {
     this.props.navigation.navigate(this.props.navigation.state.params.route);
@@ -97,6 +108,27 @@ class NewItem extends Component {
 
   }
 
+
+
+  drucken(id: string, item: string, count: string, datum: string) {
+    this.props.navigation.navigate(this.props.navigation.state.params.route);
+    axios.post(process.env.REACT_APP_LOCALAPI+'/print', {
+        'id': id,
+        'item': item,
+        'date': datum,
+        'count': count,
+        'link': process.env.REACT_APP_HOST
+  })
+    .then((response) => {
+      console.log(response);
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+
+
+
   render() {
     const { id, owner, name, beschreibung, fridge } = this.state;
     //const { itemID } = this.props.navigation.state.params
@@ -104,7 +136,7 @@ class NewItem extends Component {
     return (
       <Container style={styles.container}>
         <Header>
-  
+
           <Body>
             <Title>{this.state.name}</Title>
           </Body>
@@ -145,6 +177,17 @@ class NewItem extends Component {
               />
             </Item>
 
+            <Item fixedLabel >
+              <Label>Anzahl:  </Label>
+                <Input
+                  name="anzahl"
+                  value={this.state.count}
+                  type="number"
+                  onChange={e => this.onCountChange(e.target.value)}
+
+                />
+              </Item>
+
             <Item fixedLabel>
               <Label>Owner:           </Label>
                 <Input
@@ -167,7 +210,7 @@ class NewItem extends Component {
 
                 <Item fixedLabel>
                   <Label>QR Code:           </Label>
-                    <QRCode value={'http://'+process.env.REACT_APP_DEV_URL+'?item='+this.state.id+'?user='+this.state.fridge} />
+                    <QRCode value={process.env.REACT_APP_LOCALAPI+'?item='+this.state.id+'?user='+this.state.fridge} />
                 </Item>
 
 
@@ -176,7 +219,10 @@ class NewItem extends Component {
 
         <Footer>
           <FooterTab>
-            <Button success onClick={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
+            <Button success onClick={() => {this.drucken(this.state.id, this.state.name, this.state.count, this.state.datum)}}>
+              <Text>Print & Safe</Text>
+            </Button>
+            <Button warning onClick={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
               <Text>Safe</Text>
             </Button>
             <Button danger onClick={() => {this.deleteItem(this.state.id)}}>

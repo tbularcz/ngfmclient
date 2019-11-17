@@ -35,11 +35,18 @@ const SignInPage = () => (
 );
 
 class Login extends Component {
+
+  componentDidMount() {
+    console.log('params: '+this.props.params)
+  }
+
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
 
   }
+
+
 
   onSubmit = event => {
     const { email, password } = this.state;

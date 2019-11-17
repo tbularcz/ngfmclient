@@ -15,8 +15,27 @@ import {
 } from "native-base";
 
 import styles from "./styles";
+import {withRouter} from 'react-router'
+import 'url-search-params-polyfill'
+import { withFirebase } from '../../components/firebase';
+
 
 class Home extends Component {
+  componentDidMount() {
+    //goto detail page if ID is set
+    const searchParams = new URLSearchParams(window.location.search);
+    console.log(searchParams.get('id'))
+    const id = searchParams.get('id')
+    //prüfen ob es die ID gibt
+    this.props.firebase.citem(id).once('value', snapshot => {
+      if (snapshot.exists()){
+        //const userData = snapshot.val();
+        console.log("exists!: reroute");
+        this.props.navigation.navigate("DeleteItem", {itemId: id, route: 'Home'})
+      }
+    })
+  }
+
   addItem() {
     //console.log('new Item')
     this.props.navigation.navigate("NewItem", {route: 'Home'})
@@ -24,7 +43,9 @@ class Home extends Component {
   };
 
 
+
   render() {
+
     return (
       <Container style={styles.container}>
         <Header>
@@ -77,4 +98,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default withFirebase(Home);

@@ -21,6 +21,7 @@ import {
 
 import styles from "./styles";
 import { withFirebase } from '../../../components/firebase';
+import axios from 'axios'
 
 const INITIAL_STATE = {
   name: '',
@@ -28,6 +29,7 @@ const INITIAL_STATE = {
   owner: '',
   id: '',
   fridge:'',
+  datum: ''
 };
 
 
@@ -44,11 +46,14 @@ class detItem extends Component {
     this.props.firebase.citem(this.props.navigation.state.params.itemId).on('value', snapshot => {
       const usersObject = snapshot.val();
 
-        this.setState({owner: usersObject.Owner,
+        this.setState({
+                      id:this.props.navigation.state.params.itemId,
+                      owner: usersObject.Owner,
                       beschreibung: usersObject.Beschreibung,
                       name: usersObject.Name,
                       fridge: usersObject.Fridge,
-                      datum: usersObject.Date
+                      datum: usersObject.Date,
+                      count: usersObject.Count
                       })
 
 
@@ -79,6 +84,41 @@ class detItem extends Component {
     updates['/items/' +this.props.navigation.state.params.itemId + "/Name"] = value;
     this.props.firebase.updateDB(updates);
 
+  }
+
+  onCountChange(value: string) {
+    this.setState({
+      count: value
+    });
+    var updates = {};
+    updates['/items/' +this.props.navigation.state.params.itemId + "/Count"] = value;
+    this.props.firebase.updateDB(updates);
+
+  }
+
+  onDatumChange(value: string) {
+    this.setState({
+      datum: value
+    });
+    var updates = {};
+    updates['/items/' +this.props.navigation.state.params.itemId + "/Datum"] = value;
+    this.props.firebase.updateDB(updates);
+
+  }
+
+  drucken(id: string, item: string, count: string, datum: string) {
+    axios.post(process.env.REACT_APP_LOCALAPI+'/print', {
+        'id': id,
+        'item': item,
+        'date': datum,
+        'count': count,
+        'link': process.env.REACT_APP_HOST
+  })
+    .then((response) => {
+      console.log(response);
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   render() {
@@ -136,13 +176,23 @@ class detItem extends Component {
               />
             </Item>
             <Item fixedLabel >
+              <Label>Anzahl:  </Label>
+                <Input
+                  name="beschreibung"
+                  value={this.state.count}
+                  type="text"
+                  onChange={e => this.onCountChange(e.target.value)}
+
+                />
+              </Item>
+            <Item fixedLabel >
               <Label>Eingefroren am:  </Label>
                 <Input
-                  disabled='true'
+
                   name="Datum"
                   value={this.state.datum}
                   type="date"
-
+                  onChange={e => this.onDatumChange(e.target.value)}
 
                 />
               </Item>
@@ -168,7 +218,7 @@ class detItem extends Component {
                 </Item>
                 <Item fixedLabel>
                   <Label>QR Code:           </Label>
-                    <QRCode value={'http://'+process.env.REACT_APP_DEV_URL+'?item='+this.state.id+'?user='+this.state.fridge} />
+                    <QRCode id="code" value={'http://'+process.env.REACT_APP_DEV_URL+'?item='+this.state.id+'?user='+this.state.fridge} />
                 </Item>
 
         </Form>
@@ -178,6 +228,9 @@ class detItem extends Component {
           <FooterTab>
             <Button active success full onClick={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
               <Text>Speichern</Text>
+            </Button>
+            <Button active warning full onClick={() => {this.drucken(this.state.id, this.state.name, this.state.count, this.state.datum)}}>
+              <Text>Drucken</Text>
             </Button>
 
           </FooterTab>

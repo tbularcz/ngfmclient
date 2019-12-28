@@ -115,12 +115,12 @@ constructor(props) {
             </Left>
 
             <Right>
-              <Button onClick= {() => this.props.navigation.navigate("DeleteItem", {itemId: data.key})}>
+              <Button onPress= {() => this.props.navigation.navigate("DeleteItem", {itemId: data.key})}>
                 <Text>-</Text>
               </Button>
             </Right>
             <Right>
-              <Button onClick= {() => this.gotoDetails(data)}>
+              <Button onPress= {() => this.gotoDetails(data)}>
                 <Text>></Text>
               </Button>
             </Right>
@@ -157,7 +157,7 @@ constructor(props) {
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={() => {this.addItem()}}>
+            <Button active full onPress={() => {this.addItem()}}>
               <Text>Add New Item</Text>
             </Button>
           </FooterTab>

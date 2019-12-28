@@ -152,7 +152,7 @@ class NewItem extends Component {
 
         <Footer>
           <FooterTab>
-          <Button active full onClick={() => {this.changeDFridge(this.state.id)}}>
+          <Button active full onPress={() => {this.changeDFridge(this.state.id)}}>
             <Text>Set as Default Fridge</Text>
           </Button>
           </FooterTab>

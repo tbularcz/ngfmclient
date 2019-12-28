@@ -24,6 +24,7 @@ import { withFirebase } from '../../../components/firebase';
 
 const INITIAL_STATE = {
   name: '',
+  fname: '',
   beschreibung: '',
   owner: '',
   id: '',
@@ -47,6 +48,12 @@ class DetItem extends Component {
                       name: usersObject.Name,
                       fridge: usersObject.Fridge
                       })
+                      this.props.firebase.cfridge(usersObject.Fridge).on('value', snapshot => {
+                        const usersObject = snapshot.val();
+                          this.setState({
+                                        fname: usersObject.Name,
+                                        })
+                      });
       }
     });
   }
@@ -133,7 +140,7 @@ class DetItem extends Component {
                   <Input
                   disabled='true'
                     name="fridge"
-                    value={fridge}
+                    value={this.state.fname}
                     type="text"
                   />
                 </Item>
@@ -143,7 +150,7 @@ class DetItem extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full danger onClick={() => {this.deleteItem(this.props.navigation.state.params.itemId)}}>
+            <Button active full danger onPress={() => {this.deleteItem(this.props.navigation.state.params.itemId)}}>
               <Text>Delete Item</Text>
             </Button>
           </FooterTab>

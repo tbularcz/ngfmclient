@@ -5,11 +5,13 @@ import { compose } from 'recompose';
 import {
   Container,
     Header,
+    HR,
     Title,
     Content,
     Button,
     Item,
     Label,
+    TextInput,
     Input,
     Body,
     Left,
@@ -43,6 +45,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
+
 
   }
 
@@ -86,28 +89,31 @@ class Login extends Component {
 
           <Form>
 
-          <Item inlineLabel>
-            <Label>Email Address:</Label>
+
+            <Label style={styles.label}>
+              Email Address:
+            </Label>
               <Input
+                style={styles.input}
                 name="email"
                 value={email}
                 onChange={this.onChange}
                 type="text"
               />
-            </Item>
 
-            <Item inlineLabel last>
-              <Label>Password:        </Label>
+
+              <Label style={styles.label}>Password:</Label>
                 <Input
+                  style={styles.input}
                   name="password"
                   value={password}
                   onChange={this.onChange}
                   type="password"
                   secureTextEntry
                 />
-            </Item>
 
-            <Button disabled={isInvalid} onClick={this.onSubmit} block style={{ margin: 15, marginTop: 50 }}>
+
+            <Button disabled={isInvalid} onPress={this.onSubmit} block style={{ margin: 15, marginTop: 50 }}>
               <Text>Sign In</Text>
             </Button>
 

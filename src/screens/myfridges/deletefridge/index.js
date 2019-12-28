@@ -151,7 +151,7 @@ class deleteFridge extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full danger onClick={() => {this.deleteFridge(this.props.navigation.state.params.fridgeId)}}>
+            <Button active full danger onPress={() => {this.deleteFridge(this.props.navigation.state.params.fridgeId)}}>
               <Text>Delete Fridge</Text>
             </Button>
           </FooterTab>

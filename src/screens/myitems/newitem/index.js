@@ -89,7 +89,6 @@ class NewItem extends Component {
     var updates = {};
     updates['/items/' +this.state.id + "/Name"] = value;
     this.props.firebase.updateDB(updates);
-
   }
   onCountChange(value: string) {
     this.setState({
@@ -98,14 +97,12 @@ class NewItem extends Component {
     var updates = {};
     updates['/items/' +this.state.id + "/Count"] = value;
     this.props.firebase.updateDB(updates);
-
   }
 
   deleteItem(data) {
     this.props.navigation.navigate(this.props.navigation.state.params.route);
     console.log('remove: ', data)
     this.props.firebase.removeItem(data);
-
   }
 
 
@@ -146,72 +143,66 @@ class NewItem extends Component {
         <Content padder>
         <Form>
 
-        <Item fixedLabel>
-          <Label>ID:               </Label>
+
+          <Label style={styles.label}>ID:               </Label>
             <Input
+              style={styles.input}
               disable='true'
               name="id"
               value={this.state.id}
               type="text"
             />
-          </Item>
 
-        <Item fixedLabel>
-          <Label>Artikel:          </Label>
+          <Label style={styles.label}>Artikel:          </Label>
             <Input
+              style={styles.input}
               name="item"
               value={this.state.name}
               type="text"
               onChange={e => this.onNameChange(e.target.value)}
             />
-          </Item>
 
-          <Item fixedLabel >
-            <Label>Beschreibung:  </Label>
+            <Label style={styles.label}>Beschreibung:  </Label>
               <Input
+                style={styles.input}
                 name="beschreibung"
                 value={this.state.beschreibung}
                 type="text"
                 onChange={e => this.onBeschreibungChange(e.target.value)}
 
               />
-            </Item>
 
-            <Item fixedLabel >
-              <Label>Anzahl:  </Label>
+              <Label style={styles.label}>Anzahl:  </Label>
                 <Input
+                  style={styles.input}
                   name="anzahl"
                   value={this.state.count}
                   type="number"
                   onChange={e => this.onCountChange(e.target.value)}
 
                 />
-              </Item>
 
-            <Item fixedLabel>
-              <Label>Owner:           </Label>
+              <Label style={styles.label}>Owner:           </Label>
                 <Input
-                disabled='true'
+                  style={styles.input}
+                  disabled='true'
                   name="Owner"
                   value={this.state.owner}
                   type="text"
                 />
-              </Item>
 
-              <Item fixedLabel>
-                <Label>Fridge:           </Label>
+                <Label style={styles.label}>Fridge:           </Label>
                   <Input
-                  disabled='true'
+                    style={styles.input}
+                    disabled='true'
                     name="fridge"
-                    value={this.state.fridge}
+                    value={this.state.fname}
                     type="text"
                   />
-                </Item>
 
-                <Item fixedLabel>
-                  <Label>QR Code:           </Label>
-                    <QRCode value={process.env.REACT_APP_LOCALAPI+'?item='+this.state.id+'?user='+this.state.fridge} />
-                </Item>
+                  <Label style={styles.label}>QR Code:           </Label>
+                    <QRCode style={styles.label} id="code" value={process.env.REACT_APP_HOST+'?id='+this.state.id} />
+
 
 
         </Form>
@@ -219,13 +210,13 @@ class NewItem extends Component {
 
         <Footer>
           <FooterTab>
-            <Button success onClick={() => {this.drucken(this.state.id, this.state.name, this.state.count, this.state.datum)}}>
+            <Button success onPress={() => {this.drucken(this.state.id, this.state.name, this.state.count, this.state.datum)}}>
               <Text>Print & Safe</Text>
             </Button>
-            <Button warning onClick={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
+            <Button warning onPress={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
               <Text>Safe</Text>
             </Button>
-            <Button danger onClick={() => {this.deleteItem(this.state.id)}}>
+            <Button danger onPress={() => {this.deleteItem(this.state.id)}}>
               <Text>Discard</Text>
             </Button>
           </FooterTab>

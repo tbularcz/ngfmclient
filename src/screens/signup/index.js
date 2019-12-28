@@ -131,7 +131,7 @@ class Signup extends Component {
                 secureTextEntry
               />
             </Item>
-            <Button disabled={isInvalid} onClick={this.onSubmit} block style={{ margin: 15, marginTop: 50 }}>
+            <Button disabled={isInvalid} onPress={this.onSubmit} block style={{ margin: 15, marginTop: 50 }}>
               <Text>Sign Up </Text>
             </Button>
             {error && <p>{error.message}</p>}

@@ -46,6 +46,7 @@ class detFridge extends Component {
                       beschreibung: usersObject.Beschreibung,
                       name: usersObject.Name,
                       })
+      
     });
   }
 
@@ -107,7 +108,7 @@ class detFridge extends Component {
             <Input
               disable='true'
               name="id"
-              value={this.props.navigation.state.params.itemId}
+              value={this.props.navigation.state.params.fridgeId}
               type="text"
             />
           </Item>
@@ -147,7 +148,7 @@ class detFridge extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={() => {this.changeDFridge(this.props.navigation.state.params.itemId)}}>
+            <Button active full onPress={() => {this.changeDFridge(this.props.navigation.state.params.itemId)}}>
               <Text>Set as Default Fridge</Text>
             </Button>
           </FooterTab>

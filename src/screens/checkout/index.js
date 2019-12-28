@@ -105,7 +105,7 @@ class Home extends Component {
 
         <Text>  </Text>
 
-        <Button danger full onClick={() => {this.props.navigation.navigate("CheckOut")}}>
+        <Button danger full onPress={() => {this.props.navigation.navigate("CheckOut")}}>
           <Text>Check Out Item</Text>
         </Button>
 
@@ -132,7 +132,7 @@ class Home extends Component {
             <Left>
               <Button transparent>
                 <Icon active name="thumbs-up" />
-                <Text onClick={() => {this.getLink(this.state.testQR)}}>12 Likes</Text>
+                <Text onPress={() => {this.getLink(this.state.testQR)}}>12 Likes</Text>
               </Button>
             </Left>
             <Body>

@@ -108,12 +108,12 @@ class myFridges extends Component {
             </Left>
 
             <Right>
-              <Button onClick= {() => this.props.navigation.navigate("DeleteFridge", {fridgeId: data.key})}>
+              <Button onPress= {() => this.props.navigation.navigate("DeleteFridge", {fridgeId: data.key})}>
                 <Text>-</Text>
               </Button>
             </Right>
             <Right>
-              <Button onClick= {() => this.gotoFDetails(data)}>
+              <Button onPress= {() => this.gotoFDetails(data)}>
                 <Text>></Text>
               </Button>
             </Right>
@@ -150,7 +150,7 @@ class myFridges extends Component {
 
         <Footer>
           <FooterTab>
-            <Button active full onClick={() => {this.addFridge()}}>
+            <Button active full onPress={() => {this.addFridge()}}>
               <Text>Add New Fridge</Text>
             </Button>
           </FooterTab>

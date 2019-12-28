@@ -25,6 +25,8 @@ import axios from 'axios'
 
 const INITIAL_STATE = {
   name: '',
+  oname: '',
+  fname: '',
   beschreibung: '',
   owner: '',
   id: '',
@@ -38,10 +40,12 @@ class detItem extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
+    this.onNameChange = this.onNameChange.bind(this)
 
   }
 
   componentDidMount() {
+
 
     this.props.firebase.citem(this.props.navigation.state.params.itemId).on('value', snapshot => {
       const usersObject = snapshot.val();
@@ -56,8 +60,19 @@ class detItem extends Component {
                       count: usersObject.Count
                       })
 
+                      this.props.firebase.cfridge(usersObject.Fridge).on('value', snapshot => {
+                        const usersObject = snapshot.val();
+                          this.setState({
+                                        fname: usersObject.Name,
+                                        })
+                      });
 
     });
+    this.props.firebase.username().on('value', snapshot => {
+      const usersObject = snapshot.val();
+      this.setState({oname: usersObject})
+    });
+
 
   }
 
@@ -145,91 +160,89 @@ class detItem extends Component {
         <Content padder>
         <Form>
 
-        <Item fixedLabel>
-          <Label>ID:               </Label>
+
+          <Label style={styles.label}>ID:               </Label>
             <Input
+              style={styles.input}
               disable='true'
               name="id"
               value={this.props.navigation.state.params.itemId}
               type="text"
             />
-          </Item>
 
-        <Item fixedLabel>
-          <Label>Artikel:          </Label>
+
+
+          <Label style={styles.label}>Artikel:          </Label>
             <Input
+              style={styles.input}
               name="item"
-              value={this.state.name}
+              value={this.state.oname}
               type="text"
               onChange={e => this.onNameChange(e.target.value)}
             />
-          </Item>
 
-          <Item fixedLabel >
-            <Label>Beschreibung:  </Label>
+
+
+            <Label style={styles.label}>Beschreibung:  </Label>
               <Input
+                style={styles.input}
                 name="beschreibung"
                 value={this.state.beschreibung}
                 type="text"
                 onChange={e => this.onBeschreibungChange(e.target.value)}
-
               />
-            </Item>
-            <Item fixedLabel >
-              <Label>Anzahl:  </Label>
+
+              <Label style={styles.label}>Anzahl:  </Label>
                 <Input
+                  style={styles.input}
                   name="beschreibung"
                   value={this.state.count}
                   type="text"
                   onChange={e => this.onCountChange(e.target.value)}
 
                 />
-              </Item>
-            <Item fixedLabel >
-              <Label>Eingefroren am:  </Label>
-                <Input
 
+              <Label style={styles.label}>Eingefroren am:  </Label>
+                <Input
+                  style={styles.input}
                   name="Datum"
                   value={this.state.datum}
                   type="date"
                   onChange={e => this.onDatumChange(e.target.value)}
 
                 />
-              </Item>
 
-            <Item fixedLabel>
-              <Label>Owner:           </Label>
+              <Label style={styles.label}>Owner:           </Label>
                 <Input
-                disabled='true'
+                  style={styles.input}
+                  disabled='true'
                   name="owner"
-                  value={owner}
+                  value={this.state.oname}
                   type="text"
                 />
-              </Item>
 
-              <Item fixedLabel>
-                <Label>Fridge:           </Label>
+                <Label style={styles.label}>Fridge:           </Label>
                   <Input
-                  disabled='true'
+                    style={styles.input}
+                    disabled='true'
                     name="fridge"
-                    value={fridge}
+                    value={this.state.fname}
                     type="text"
                   />
-                </Item>
-                <Item fixedLabel>
-                  <Label>QR Code:           </Label>
-                    <QRCode id="code" value={'http://'+process.env.REACT_APP_DEV_URL+'?item='+this.state.id+'?user='+this.state.fridge} />
-                </Item>
+
+                  <Label style={styles.label}>QR Code:           </Label>
+                    <QRCode style={styles.label} id="code" value={process.env.REACT_APP_HOST+'?id='+this.state.id} />
+
 
         </Form>
         </Content>
 
         <Footer>
           <FooterTab>
-            <Button active success full onClick={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
+            <Button active success full onPress={() => {this.props.navigation.navigate(this.props.navigation.state.params.route)}}>
               <Text>Speichern</Text>
             </Button>
-            <Button active warning full onClick={() => {this.drucken(this.state.id, this.state.name, this.state.count, this.state.datum)}}>
+            <Button active warning full onPress={() => {this.drucken(this.state.id, this.state.name, this.state.count, this.state.datum)}}>
               <Text>Drucken</Text>
             </Button>
 

@@ -68,19 +68,19 @@ class Home extends Component {
         <Text><b>Please select an action:</b></Text>
         <Text> </Text>
 
-        <Button active full onClick={() => {this.addItem()}}>
+        <Button active full onPress={() => {this.addItem()}}>
           <Text>Add Item</Text>
         </Button>
 
         <Text>  </Text>
 
-        <Button danger full onClick={() => {this.props.navigation.navigate("CheckOut")}}>
+        <Button danger full onPress={() => {this.props.navigation.navigate("CheckOut")}}>
           <Text>Check Out Item</Text>
         </Button>
 
         <Text> </Text>
 
-        <Button warning full onClick={() => {this.props.navigation.navigate("MyItems")}}>
+        <Button warning full onPress={() => {this.props.navigation.navigate("MyItems")}}>
           <Text>Show my Items</Text>
         </Button>
 

@@ -19,7 +19,7 @@ class Welcome extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
-    //this.onSubmit = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     //this.props.firebase = this.props.firebase.bind(this);
   }
 
@@ -106,7 +106,7 @@ class Welcome extends Component {
           <View style={{ marginBottom: 40 }}>
             <Button
               style={{ backgroundColor: "#6FAF98", alignSelf: "center" }}
-              onClick={this.onSubmit}
+              onPress={this.onSubmit}
             >
               <Text>TB Login</Text>
             </Button>

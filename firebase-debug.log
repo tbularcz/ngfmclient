@@ -1,0 +1,14 @@
+[debug] [2019-12-28T15:43:19.235Z] ----------------------------------------------------------------------
+[debug] [2019-12-28T15:43:19.240Z] Command:       C:\Tools\nodejs\node.exe C:\Tools\nodejs\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-12-28T15:43:19.240Z] CLI Version:   7.2.2
+[debug] [2019-12-28T15:43:19.241Z] Platform:      win32
+[debug] [2019-12-28T15:43:19.241Z] Node Version:  v10.16.0
+[debug] [2019-12-28T15:43:19.244Z] Time:          Sat Dec 28 2019 16:43:19 GMT+0100 (GMT+01:00)
+[debug] [2019-12-28T15:43:19.244Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-12-28T15:43:19.289Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-12-28T15:43:19.290Z] > authorizing via signed-in user
+[debug] [2019-12-28T15:43:19.290Z] [iam] checking project ngtfridge for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-12-28T15:43:19.292Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-12-28T15:43:19.292Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>

@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import 'firebase/storage'
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -21,6 +22,7 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = app.database();
+    this.sto = app.storage();
 
     //this.addItem =this.addItem.bind(this)
   }
@@ -41,7 +43,7 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
 
   updateDB = updates => {
-    //console.log("user in updateDB:", updates)
+    console.log("write to updateDB:", updates)
     return this.db.ref().update(updates);
   }
 
@@ -87,18 +89,26 @@ class Firebase {
 
    }
 
+  getJPEG = (reference) =>{
+    var URI = ""
+    console.log("JPEG: "+reference)
 
+  }
 
   removeItem = (reference) => {
+    var desertRef = this.imageref(reference)
+    desertRef.delete().then(function() {
+        // File deleted successfully
+    }).catch(function(error) {
+        // Uh-oh, an error occurred!
+    });
     this.moveFbRecord(this.db.ref().child('/items/' + reference), this.db.ref().child('/r_items/' + reference));
-
     this.db.ref().child('/items/' + reference).remove();
     this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myitems/"+reference).remove();
   }
 
   removeFridge = (reference) => {
     this.moveFbRecord(this.db.ref().child('/fridges/' + reference), this.db.ref().child('/r_fridges/' + reference));
-
     this.db.ref().child('/fridges/' + reference).remove();
     this.db.ref().child('/users/' + this.auth.currentUser.uid + "/myfridges/"+reference).remove();
   }
@@ -126,9 +136,17 @@ class Firebase {
     return newPostKey;
   }
 
+  addPicture = (dataUri, id) => {
+    var updates = {};
+    var message = dataUri;
+    var ref = this.sto.ref().child('images/'+id+'.uri')
+    ref.putString(message, 'data_url', {contentType:'image/png'}).then(function(snapshot) {
+      console.log('Uploaded a data_url string!');
+    })
+        updates['/items/' + id + "/Image"] = true;
+        this.updateDB(updates);
+  }
 
-
-  //addFridge
   // *** User API ***
 
   user = uid => this.db.ref(`users/${uid}`);
@@ -146,8 +164,9 @@ class Firebase {
   allitems = () => this.db.ref(`items`);
   allfridges = () => this.db.ref(`fridges`);
   fridgeowner = id => this.db.ref(`fridges/${id}/Name`);
+  imageref = link => this.sto.refFromURL(process.env.REACT_APP_STORAGE_GD+`${link}.uri`)
 
-  //fridges = uid => this.db.ref(`users/${uid}/myfridges`);
+
 }
 
 export default Firebase;

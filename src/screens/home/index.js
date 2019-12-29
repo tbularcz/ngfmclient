@@ -72,12 +72,6 @@ class Home extends Component {
           <Text>Add Item</Text>
         </Button>
 
-        <Text>  </Text>
-
-        <Button danger full onPress={() => {this.props.navigation.navigate("CheckOut")}}>
-          <Text>Check Out Item</Text>
-        </Button>
-
         <Text> </Text>
 
         <Button warning full onPress={() => {this.props.navigation.navigate("MyItems")}}>

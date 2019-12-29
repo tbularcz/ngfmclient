@@ -18,10 +18,12 @@ import {
   Picker,
   Input
 } from "native-base";
+import { Image, View } from 'react-native';
 
 import styles from "./styles";
 import { withFirebase } from '../../../components/firebase';
 
+const no_image_available = require("../../../assets/no_image_available.jpeg");
 const INITIAL_STATE = {
   name: '',
   fname: '',
@@ -44,16 +46,27 @@ class DetItem extends Component {
       const usersObject = snapshot.val();
       if (usersObject!=null){
         this.setState({owner: usersObject.Owner,
-                      beschreibung: usersObject.Beschreibung,
-                      name: usersObject.Name,
-                      fridge: usersObject.Fridge
-                      })
-                      this.props.firebase.cfridge(usersObject.Fridge).on('value', snapshot => {
-                        const usersObject = snapshot.val();
-                          this.setState({
-                                        fname: usersObject.Name,
-                                        })
-                      });
+          beschreibung: usersObject.Beschreibung,
+          name: usersObject.Name,
+          fridge: usersObject.Fridge
+          })
+          if (usersObject.Image){
+            console.log('image available')
+
+            const link = this.props.firebase.imageref(this.props.navigation.state.params.itemId).getDownloadURL().then(url=> {
+              console.log("return",url)
+              this.setState({
+                  loading: false,
+                  uri: url
+              });
+          })
+        }else{this.state.uri = no_image_available}
+          this.props.firebase.cfridge(usersObject.Fridge).on('value', snapshot => {
+            const usersObject = snapshot.val();
+              this.setState({
+                            fname: usersObject.Name,
+                            })
+          });
       }
     });
   }
@@ -144,6 +157,10 @@ class DetItem extends Component {
                     type="text"
                   />
                 </Item>
+                <Label style={styles.label}>Picture:</Label>
+                <View style={{paddingLeft: 15, paddingTop: 15}}>
+                  <Image source={this.state.uri} style={{height: 400, width: 400  }}/>
+                </View>
 
         </Form>
         </Content>

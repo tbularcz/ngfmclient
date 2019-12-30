@@ -23,6 +23,7 @@ import { Image, View } from 'react-native';
 import styles from "./styles";
 import { withFirebase } from '../../../components/firebase';
 import axios from 'axios'
+import { cacheAdapterEnhancer } from 'axios-extensions'
 import Camera from 'react-html5-camera-photo';
 
 const no_image_available = require("../../../assets/no_image_available.jpeg");
@@ -63,10 +64,7 @@ class detItem extends Component {
         image:usersObject.Image
         })
         if (usersObject.Image){
-          console.log('image available')
-
           const link = this.props.firebase.imageref(this.props.navigation.state.params.itemId).getDownloadURL().then(url=> {
-            console.log("return",url)
             this.setState({
                 loading: false,
                 uri: url
@@ -130,19 +128,29 @@ class detItem extends Component {
 
   }
 
-  drucken(id: string, item: string, count: string, datum: string) {
-    axios.post(process.env.REACT_APP_LOCALAPI+'/print', {
-        'id': id,
-        'item': item,
-        'date': datum,
-        'count': count,
-        'link': process.env.REACT_APP_HOST
-  })
-    .then((response) => {
-      console.log(response);
-    }, (error) => {
-      console.log(error);
-    });
+
+
+
+   async drucken(id: string, item: string, count: string, datum: string) {
+
+     const link = process.env.REACT_APP_HOST+'?id='+this.state.id
+     try {
+       await axios.post('https://192.168.2.137:8081/print', {
+        headers:{},
+        data:{
+          id: id,
+          item: item,
+          count: count,
+          datum: datum,
+          link: link
+        }}).then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+    }
+    catch(error){
+        console.log("error in catch: ", error)
+    }
   }
 
   changePicture(){

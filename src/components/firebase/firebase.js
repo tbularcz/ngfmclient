@@ -64,8 +64,6 @@ class Firebase {
 
   addnewFridge = (Beschreibung, Name) => {
     var newPostKey = this.db.ref().child('fridges').push().key;
-    console.log("user add new Fridge: ",newPostKey );
-
     var updates = {};
         updates['/fridges/' + newPostKey + "/Name"] = Name;
         updates['/fridges/' + newPostKey + "/Beschreibung"] = Beschreibung;
@@ -88,12 +86,6 @@ class Firebase {
           });
 
    }
-
-  getJPEG = (reference) =>{
-    var URI = ""
-    console.log("JPEG: "+reference)
-
-  }
 
   removeItem = (reference) => {
     var desertRef = this.imageref(reference)

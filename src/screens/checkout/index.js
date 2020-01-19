@@ -33,7 +33,7 @@ import {
 } from "native-base";
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
-import jsQR from "jsqr";
+
 import pngjs from "pngjs";
 
 
@@ -72,7 +72,7 @@ class Home extends Component {
   getLink(dataUri){
     const image = pngjs.PNG.sync.read("data:image/png;base64,",dataUri)
     const data = new Uint8Array(image.data)
-    //const code = jsQR("data:image/png;base64,",dataUri);
+  
     console.log("Found QR code", data);
   }
 

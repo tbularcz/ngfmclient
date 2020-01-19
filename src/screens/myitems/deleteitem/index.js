@@ -51,10 +51,7 @@ class DetItem extends Component {
           fridge: usersObject.Fridge
           })
           if (usersObject.Image){
-            console.log('image available')
-
             const link = this.props.firebase.imageref(this.props.navigation.state.params.itemId).getDownloadURL().then(url=> {
-              console.log("return",url)
               this.setState({
                   loading: false,
                   uri: url
@@ -77,7 +74,6 @@ class DetItem extends Component {
 
   deleteItem(data) {
     this.props.navigation.navigate("MyItems");
-    console.log('remove: ', data)
     this.props.firebase.removeItem(data);
 
   }
@@ -134,7 +130,6 @@ class DetItem extends Component {
                 value={this.state.beschreibung}
                 type="text"
                 disabled='true'
-
               />
             </Item>
 

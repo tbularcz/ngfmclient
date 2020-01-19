@@ -23,8 +23,11 @@ import { Image, View } from 'react-native';
 import styles from "./styles";
 import { withFirebase } from '../../../components/firebase';
 import axios from 'axios'
-import Camera from 'react-html5-camera-photo';
+//import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
+import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
+
+
 
 const no_image_available = require("../../../assets/no_image_available.jpeg");
 
@@ -36,8 +39,12 @@ const INITIAL_STATE = {
   owner: '',
   id: '',
   fridge:'',
-  uri:'',
-  changePicturetrigger:false
+  imageuri:'',
+  changePicturetrigger:false,
+  addBarcodetrigger:false,
+  barcodeuri:'',
+
+
 };
 
 
@@ -50,6 +57,7 @@ class NewItem extends Component {
     this.state = { ...INITIAL_STATE };
       this.changePicture = this.changePicture.bind(this)
       this.changePictureRender = this.changePictureRender.bind(this)
+      this.addBarcodeRender = this.addBarcodeRender.bind(this)
   }
 
   componentDidMount() {
@@ -63,18 +71,32 @@ class NewItem extends Component {
             beschreibung: usersObject.Beschreibung,
             name: usersObject.Name,
             fridge: usersObject.Fridge,
-            anzahl: usersObject.Count
+            anzahl: usersObject.Count,
+            barcode:usersObject.Barcode,
+            imageuri: no_image_available
             })
-            if(usersObject.uri==undefined){
-              this.state.uri = no_image_available}
+
+            if (usersObject.Barcode){
+              console.log("aaa",this.state.id)
+                const link = this.props.firebase.barcoderef(this.state.id).getDownloadURL().then(urlb=> {
+                  console.log("bbb",urlb)
+                  this.setState({
+                      loading: false,
+                      barcodeuri: urlb
+                  });
+                })
+            }else{
+              this.state.barcodeuri = no_image_available
+            }
+
             this.props.firebase.cfridge(usersObject.Fridge).on('value', snapshot => {
               const usersObject = snapshot.val();
                 this.setState({
                   fname: usersObject.Name,
                   })
             });
-          }
-      });
+          };
+        });
   }
 
   componentWillUnmount() {
@@ -93,7 +115,6 @@ class NewItem extends Component {
   }
 
   addItem = event => {
-    console.log("user add new Item: " )
     event.preventDefault();
   };
 
@@ -117,23 +138,47 @@ class NewItem extends Component {
 
   deleteItem(data) {
     this.props.navigation.navigate(this.props.navigation.state.params.route);
-    console.log('remove: ', data)
     this.props.firebase.removeItem(data);
   }
 
-  drucken(id: string, item: string, count: string, datum: string) {
-    this.props.navigation.navigate(this.props.navigation.state.params.route);
-    axios.post(process.env.REACT_APP_LOCALAPI+'/print', {
-        'id': id,
-        'item': item,
-        'date': datum,
-        'count': count,
-        'link': process.env.REACT_APP_HOST
-    }).then((response) => {
-      console.log(response);
-    }, (error) => {
-      console.log(error);
-    });
+  async drucken(id: string, item: string, count: string, datum: string) {
+  //erst IP Adresse vom rasperry bekommen und dann Drucken
+
+  let iptoprint =''
+  try {
+     await axios.get('https://us-central1-ngtfridge.cloudfunctions.net/getIP', {
+       ///hier könnte man noch den User mitgeben damit es userspezifisch wird
+     }).then(res => {
+       //console.log(res);
+       iptoprint =res.data.ip.config.ip
+       console.log(res.data.ip.config.ip);
+     })
+   }
+   catch(error){
+     console.log("error in catch: ", error)
+   }
+
+  //console.out("ip to print is")
+
+   const link = process.env.REACT_APP_HOST+'?id='+this.state.id
+     try {
+
+        await axios.get("https://us-central1-ngtfridge.cloudfunctions.net/print", {params:{
+          'id': id,
+          'item': item,
+          'count': count,
+          'datum': datum,
+          'link': link
+        }}).then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+      }
+      catch(error){
+        console.log("error in catch: ", error.response)
+
+
+      }
   }
 
   changePicture(){
@@ -145,19 +190,47 @@ class NewItem extends Component {
       this.forceUpdate();
   }
 
+  addBarcode(){
+    if (this.state.addBarcodetrigger==false){
+      this.state.addBarcodetrigger=true
+    } else {
+      this.state.addBarcodetrigger=false
+    }
+      this.forceUpdate();
+  }
+
   changePictureRender(){
       this.state.changePicturetrigger=false
      return (
-       <Camera idealResolution = {{width: 300, height: 300}}
+       <Camera isImageMirror = {false} idealFacingMode = {FACING_MODES.ENVIRONMENT} idealResolution = {{width: 300, height: 300}}
          onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri, this.id);}}
+       />
+     )
+  }
+  addBarcodeRender(){
+      this.state.addBarcodetrigger=false
+     return (
+       <Camera isImageMirror = {false} idealResolution = {{width: 300, height: 300}}
+         onTakePhoto = { (barcodeUri) => { this.onTakeBarcode(barcodeUri, this.id);}}
        />
      )
   }
 
   onTakePhoto (dataUri) {
-    // Do stuff with the dataUri photo...
-    this.setState({uri: dataUri})
+    this.setState({imageuri: dataUri})
     this.props.firebase.addPicture(dataUri, this.state.id)
+  }
+
+  onTakeBarcode (barcodeUri) {
+    this.setState({barcodeuri: barcodeUri})
+
+    //const codeReader = new BrowserQRCodeReader();
+    //const img = barcodeUri;
+    this.props.firebase.addBarcode(barcodeUri, this.state.id)
+
+    //const result = codeReader.decodeFromImage(this.state.barcode);
+    //console.log(result);
+
   }
 
   render() {
@@ -233,7 +306,7 @@ class NewItem extends Component {
 
           <Label style={styles.label}>Picture:</Label>
           <View style={{paddingLeft: 15, paddingTop: 15}}>
-            <Image source={this.state.uri} style={{height: 400, width: 400  }}/>
+            <Image source={this.state.imageuri} style={{height: 400, width: 400  }}/>
           </View>
 
           <View style={{paddingLeft: 15, paddingTop: 15, paddingbottom: 30}}>
@@ -244,6 +317,26 @@ class NewItem extends Component {
           <View style={{paddingLeft: 15, paddingTop: 15, paddingbottom: 30}}>
             {this.state.changePicturetrigger ? this.changePictureRender():<text></text>}
           </View>
+
+
+          <Label style={styles.label}>Barcode:</Label>
+          <View style={{paddingLeft: 15, paddingTop: 15}}>
+            <Image source={this.state.barcodeuri} style={{height: 400, width: 400  }}/>
+          </View>
+
+          <View style={{paddingLeft: 15, paddingTop: 15, paddingbottom: 30}}>
+            <Button bordered onPress={()=>{this.addBarcode()}}>
+              <Text>Add Barcode</Text>
+            </Button>
+          </View>
+
+
+          <View style={{paddingLeft: 15, paddingTop: 15, paddingbottom: 30}}>
+            {this.state.addBarcodetrigger ? this.addBarcodeRender():<text></text>}
+          </View>
+
+
+
         </Form>
         </Content>
 

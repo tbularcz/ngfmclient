@@ -139,6 +139,17 @@ class Firebase {
         this.updateDB(updates);
   }
 
+  addBarcode = (dataUri, id) => {
+    var updates = {};
+    var message = dataUri;
+    var ref = this.sto.ref().child('barcodes/'+id+'.bc')
+    ref.putString(message, 'data_url', {contentType:'image/png'}).then(function(snapshot) {
+      console.log('Uploaded a data_url string!');
+    })
+        updates['/items/' + id + "/Barcode"] = true;
+        this.updateDB(updates);
+  }
+
   // *** User API ***
 
   user = uid => this.db.ref(`users/${uid}`);
@@ -156,7 +167,8 @@ class Firebase {
   allitems = () => this.db.ref(`items`);
   allfridges = () => this.db.ref(`fridges`);
   fridgeowner = id => this.db.ref(`fridges/${id}/Name`);
-  imageref = link => this.sto.refFromURL(process.env.REACT_APP_STORAGE_GD+`${link}.uri`)
+  imageref = link => this.sto.refFromURL(process.env.REACT_APP_STORAGE_GD+'images/'+`${link}.uri`)
+  barcoderef = link => this.sto.refFromURL(process.env.REACT_APP_STORAGE_GD+'barcodes/'+`${link}.bc`)
 
 
 }

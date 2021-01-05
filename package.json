@@ -5,7 +5,7 @@
   "homepage": "https://ngtfridge.firebaseapp.com/",
   "dependencies": {
     "autoprefixer": "7.1.6",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "axios-extensions": "^3.0.6",
     "babel-core": "6.26.0",
     "babel-eslint": "7.2.3",

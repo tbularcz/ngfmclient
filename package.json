@@ -42,7 +42,7 @@
     "quagga": "^0.12.1",
     "raf": "3.4.0",
     "react": "^16.2.0",
-    "react-dev-utils": "^5.0.0",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.2.0",
     "react-html5-camera-photo": "^1.4.3",
     "react-image-parser": "^2.0.2",
